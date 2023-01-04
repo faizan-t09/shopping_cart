@@ -19,9 +19,25 @@
 
 
 .card-container{
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
   padding-top: 30px;
   justify-content: center;
   background-color: #daeaf7;
-  height: 1000px;
+}
+
+.section-container{
+  display: flex;
+  flex-direction: row;
+  background-color: #010e54;
+}
+
+.section{
+  width:50%;
+  border:solid 1px;
+  border-radius: 5px;
+}
+
+.section-heading{
+  background-color: cadetblue;
 }

@@ -1,9 +1,7 @@
 .card{
     border: solid 1px;
     min-width: 200px;
-    min-height: 275px;
-    width: 200px;
-    height: 275px;
+    height: 280px;
     border-radius: 5px;
     margin:10px;
     background-color: #4fa5d8;
@@ -16,6 +14,7 @@ img{
     height:150px;
     width:120px
 }
+
 
 h1{
     padding:2px;
@@ -30,10 +29,11 @@ p{
     
 }
 
-.delete{
+.delete-icon{
     position: relative;
     bottom: 135px;
-    left:150px
+    left:150px;
+    cursor: pointer;
 }
 
 .actions{
@@ -42,4 +42,8 @@ p{
     display: flex;
     align-items: center;
     justify-content: space-around;
+}
+
+.actions button{
+    border-radius: 3px;
 }
