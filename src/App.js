@@ -10,7 +10,7 @@ function App() {
       </header>
       <div className='card-container'>
         {items.map((item)=>{
-          return <Card item={item} />
+          return <Card item={item} delete={true}/>
         })}
       </div>
     </div>
