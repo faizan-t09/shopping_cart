@@ -5,6 +5,7 @@
     border-radius: 5px;
     margin:10px;
     background-color: #4fa5d8;
+    cursor:zoom-in
 }
 
 img{
@@ -46,4 +47,5 @@ p{
 
 .actions button{
     border-radius: 3px;
+    cursor: pointer;
 }

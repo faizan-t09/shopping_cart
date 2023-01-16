@@ -23,6 +23,8 @@ function App() {
     },
   ]);
 
+  const [del, setDel] = useState(false);
+
   const deleteItem = (item) => {
     setItems((prev) => {
       return prev.filter((currItem) => {
@@ -34,19 +36,35 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">Welcome</header>
+      <label>Delete</label>
+      <input
+        type="checkbox"
+        onClick={() => {
+          setDel((prev) => {
+            return !prev;
+          });
+        }}
+        value={del}
+      ></input>
       <div className="section-container">
         <div className="section">
           <h1 className="section-heading">Items</h1>
           <div className="card-container">
-            {items.map((item) => {
-              return <Card key={item.imgsrc} item={item} delete={true} deleteItem={deleteItem}/>;
+            {items?.map((item) => {
+              return (
+                <Card
+                  key={item?.imgsrc}
+                  item={item}
+                  delete={del}
+                  deleteItem={deleteItem}
+                />
+              );
             })}
           </div>
         </div>
         <div className="section">
           <h1 className="section-heading">Cart</h1>
-          <div className="card-container">
-          </div>
+          <div className="card-container"></div>
         </div>
       </div>
     </div>
