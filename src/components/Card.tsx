@@ -14,12 +14,14 @@ interface propType {
   del: boolean;
   item: itemType;
   deleteItem: (item: itemType) => void;
+  onAddToCart?: (item: itemType) => void;
 }
 
 export const Card: React.FC<propType> = ({
   del,
   item,
   deleteItem,
+  onAddToCart,
 }: propType): JSX.Element => {
   const [modal, setModal] = useState(false);
 
@@ -49,22 +51,29 @@ export const Card: React.FC<propType> = ({
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
         <div className="actions">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("Wish list");
-            }}
-          >
-            Wish list
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("Add to cart");
-            }}
-          >
-            Add to cart
-          </button>
+          {onAddToCart ? (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Wish list");
+                }}
+              >
+                Wish list
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddToCart(item);
+                  console.log("Add to cart");
+                }}
+              >
+                Add to cart
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <Modal

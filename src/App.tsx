@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { Card } from "./components/Card";
 import { useState } from "react";
@@ -30,12 +30,31 @@ function App(): JSX.Element {
         "https://ii1.pepperfry.com/media/catalog/product/r/o/800x880/royal-wing-chair-in-blue-colour-by-dreamzz-furniture-royal-wing-chair-in-blue-colour-by-dreamzz-furn-pitcjr.jpg",
     },
   ]);
+  const [cart, setCart] = useState<itemType[]>(
+    JSON.parse(localStorage.getItem("Cart") || "[]")
+  );
 
-  const deleteItem = (item: itemType) => {
+  useEffect(() => {
+    localStorage.setItem("Cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const deleteItem = (item: itemType): void => {
     setItems((prev) => {
       return prev.filter((currItem) => {
         return currItem.title !== item.title;
       });
+    });
+  };
+
+  const onAddToCart = (item: itemType): void => {
+    setCart((prev) => {
+      return [...prev, item];
+    });
+  };
+
+  const onRemoveFromCart = (item: itemType): void => {
+    setCart((prev) => {
+      return prev.filter((currItem: itemType) => currItem.title !== item.title);
     });
   };
 
@@ -63,6 +82,7 @@ function App(): JSX.Element {
                   item={item}
                   del={del}
                   deleteItem={deleteItem}
+                  onAddToCart={onAddToCart}
                 />
               );
             })}
@@ -70,7 +90,20 @@ function App(): JSX.Element {
         </div>
         <div className="section">
           <h1 className="section-heading">Cart</h1>
-          <div className="card-container"></div>
+          <div className="card-container">
+            {cart?.map(
+              (item: itemType) => {
+                return (
+                  <Card
+                    key={item?.imgsrc}
+                    item={item}
+                    del={del}
+                    deleteItem={onRemoveFromCart}
+                  />
+                );
+              }
+            )}
+          </div>
         </div>
       </div>
     </div>
