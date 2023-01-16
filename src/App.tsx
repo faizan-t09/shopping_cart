@@ -1,9 +1,17 @@
+import React from "react";
 import "./App.css";
-import { Card } from "./components/Card.js";
+import { Card } from "./components/Card";
 import { useState } from "react";
 
-function App() {
-  const [items, setItems] = useState([
+interface itemType {
+  title: string;
+  desc: string;
+  imgsrc: string;
+}
+
+function App(): JSX.Element {
+  const [del, setDel] = useState<boolean>(false);
+  const [items, setItems] = useState<itemType[]>([
     {
       title: "Book",
       desc: "plain ol book",
@@ -23,9 +31,7 @@ function App() {
     },
   ]);
 
-  const [del, setDel] = useState(false);
-
-  const deleteItem = (item) => {
+  const deleteItem = (item: itemType) => {
     setItems((prev) => {
       return prev.filter((currItem) => {
         return currItem.title !== item.title;
@@ -39,12 +45,12 @@ function App() {
       <label>Delete</label>
       <input
         type="checkbox"
-        onClick={() => {
+        onChange={() => {
           setDel((prev) => {
             return !prev;
           });
         }}
-        value={del}
+        checked={del}
       ></input>
       <div className="section-container">
         <div className="section">
@@ -55,7 +61,7 @@ function App() {
                 <Card
                   key={item?.imgsrc}
                   item={item}
-                  delete={del}
+                  del={del}
                   deleteItem={deleteItem}
                 />
               );
