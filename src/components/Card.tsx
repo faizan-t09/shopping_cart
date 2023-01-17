@@ -4,17 +4,14 @@ import { useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 import { Modal } from "./Modal";
 
-interface itemType {
-  title: string;
-  desc: string;
-  imgsrc: string;
-}
+import {itemType} from "../interfaces/Item"
 
 interface propType {
   del: boolean;
   item: itemType;
-  deleteItem: (item: itemType) => void;
+  deleteItem: (itemTitle: string) => void;
   onAddToCart?: (item: itemType) => void;
+  toggleWishlist?: (title:string) => void
 }
 
 export const Card: React.FC<propType> = ({
@@ -22,6 +19,7 @@ export const Card: React.FC<propType> = ({
   item,
   deleteItem,
   onAddToCart,
+  toggleWishlist,
 }: propType): JSX.Element => {
   const [modal, setModal] = useState(false);
 
@@ -34,6 +32,7 @@ export const Card: React.FC<propType> = ({
           console.log("Modal");
         }}
       >
+        <img src={item.imgsrc} alt="product visual"></img>
         {del ? (
           <HiXMark
             className="delete-icon"
@@ -41,25 +40,25 @@ export const Card: React.FC<propType> = ({
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem(item);
+              deleteItem(item.title);
             }}
           />
         ) : (
           <></>
         )}
-        <img src={item.imgsrc} alt="product visual"></img>
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
+        <p>{item.price}/-</p>
         <div className="actions">
-          {onAddToCart ? (
+          {onAddToCart&&toggleWishlist ? (
             <>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("Wish list");
+                  toggleWishlist(item.title);
                 }}
               >
-                Wish list
+                {item.wishlisted ? "Added to Wish List" : "Wish list"}
               </button>
               <button
                 onClick={(e) => {

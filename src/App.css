@@ -40,4 +40,11 @@
 
 .section-heading{
   background-color: cadetblue;
+  display: flex;
+  justify-content: space-around;
+}
+
+.cart-placeholder{
+  margin-top : 50%;
+  margin-bottom:50%
 }
