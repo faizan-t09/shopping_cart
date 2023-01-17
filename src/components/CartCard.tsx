@@ -10,16 +10,12 @@ interface propType {
   del: boolean;
   item: itemType;
   deleteItem: (itemTitle: string) => void;
-  onAddToCart: (item: itemType) => void;
-  toggleWishlist: (title: string) => void;
 }
 
-export const Card: React.FC<propType> = ({
+export const CartCard: React.FC<propType> = ({
   del,
   item,
   deleteItem,
-  onAddToCart,
-  toggleWishlist,
 }: propType): JSX.Element => {
   const [modal, setModal] = useState(false);
 
@@ -47,25 +43,6 @@ export const Card: React.FC<propType> = ({
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
         <p>{item.price}/-</p>
-        <div className="actions">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleWishlist(item.title);
-            }}
-          >
-            {item.wishlisted ? "Added to Wish List" : "Wish list"}
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(item);
-              console.log("Add to cart");
-            }}
-          >
-            Add to cart
-          </button>
-        </div>
       </div>
       <Modal
         open={modal}

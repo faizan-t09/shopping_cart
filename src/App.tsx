@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Card } from "./components/Card";
+import { CartCard } from "./components/CartCard";
 import { NewItemForm } from "./components/NewItemForm";
 
 import { itemType } from "./interfaces/Item";
@@ -126,7 +127,7 @@ function App(): JSX.Element {
             {cart.length ? (
               cart?.map((item: itemType) => {
                 return (
-                  <Card
+                  <CartCard
                     key={item?.imgsrc}
                     item={item}
                     del={del}
