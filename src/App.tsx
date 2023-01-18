@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+
 import { Card } from "./components/Card";
 import { CartCard } from "./components/CartCard";
 import { NewItemForm } from "./components/NewItemForm";
+import { Header } from "./components/Header";
 
 import { itemType } from "./interfaces/Item";
 
-
-
 function App(): JSX.Element {
+  //useState to keep track of deletion enabled/disabled
   const [del, setDel] = useState<boolean>(false);
+
+  //useState for storing items
   const [items, setItems] = useState<itemType[]>([
     {
       title: "Book",
@@ -35,21 +38,28 @@ function App(): JSX.Element {
       wishlisted: true,
     },
   ]);
+
+  //useState to fetch cart items for local storage and display
   const [cart, setCart] = useState<itemType[]>(
     JSON.parse(localStorage.getItem("Cart") || "[]")
   );
+
+  //useState to keep track of form opened or closed
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
+  //Each time cart items are changed the updated cart items are written onto local storage
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cart));
   }, [cart]);
 
+  //Adds new item to the items
   const addNewItem = (item: itemType): void => {
     setItems((prev) => {
       return [...prev, item];
     });
   };
 
+  //Removes item from the items
   const deleteItem = (itemTitle: string): void => {
     setItems((prev) => {
       return prev.filter((currItem) => {
@@ -58,23 +68,51 @@ function App(): JSX.Element {
     });
   };
 
+  //Adds a item to the cart
   const onAddToCart = (item: itemType): void => {
-    setCart((prev) => {
-      return [...prev, item];
-    });
+    if (
+      cart.filter((cartItem) => {
+        return cartItem.title === item.title;
+      }).length === 0
+    ) {
+      setCart([...cart, { ...item, count: 1 }]);
+    } else {
+      setCart((prev) => {
+        return prev.map((cartItem: itemType) => {
+          if (cartItem.title === item.title) {
+            cartItem.count! += 1;
+          }
+          return cartItem;
+        });
+      });
+    }
   };
 
+  //Removes Item from the cart
   const onRemoveFromCart = (itemTitle: string): void => {
-    setCart((prev) => {
-      return prev.filter((currItem: itemType) => currItem.title !== itemTitle);
-    });
+    if (cart.filter((cartItem) => cartItem.title === itemTitle)[0].count! > 1) {
+      setCart((prev) => {
+        return prev.map((cartItem) => {
+          if (cartItem.title === itemTitle) {
+            cartItem.count! -= 1;
+          }
+          return cartItem;
+        });
+      });
+    }else{
+      setCart((prev)=>{
+        return prev.filter((cartItem)=>cartItem.title!==itemTitle)
+      })
+    }
   };
 
+  //Toggles wishlist for a item
   const toggleWishlist = (itemTitle: string): void => {
     setItems((prev) => {
       return prev.map((item) => {
-        if(item.title===itemTitle)
+        if (item.title === itemTitle) {
           item.wishlisted = !item.wishlisted;
+        }
         return item;
       });
     });
@@ -82,17 +120,8 @@ function App(): JSX.Element {
 
   return (
     <div className="App">
-      <header className="App-header">Welcome</header>
-      <label style={{ fontSize: "20px" }}>Delete</label>
-      <input
-        type="checkbox"
-        onChange={() => {
-          setDel((prev) => {
-            return !prev;
-          });
-        }}
-        checked={del}
-      ></input>
+      <Header del={del} setDel={setDel} />
+
       <div className="section-container">
         <div className="section">
           <h1 className="section-heading">
@@ -105,7 +134,6 @@ function App(): JSX.Element {
               Add Item +
             </button>
           </h1>
-
           <div className="card-container">
             {items?.map((item) => {
               return (
@@ -128,7 +156,7 @@ function App(): JSX.Element {
               cart?.map((item: itemType) => {
                 return (
                   <CartCard
-                    key={item?.imgsrc}
+                    key={item.imgsrc}
                     item={item}
                     del={del}
                     deleteItem={onRemoveFromCart}
@@ -141,6 +169,7 @@ function App(): JSX.Element {
           </div>
         </div>
       </div>
+
       <NewItemForm
         formOpen={formOpen}
         closeForm={() => {

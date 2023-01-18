@@ -49,3 +49,11 @@
   margin-top : 50%;
   margin-bottom:50%
 }
+
+button{
+  cursor: pointer;
+    padding:5px;
+    border-radius: 5px;
+    background-color:#076da8;
+    color: aliceblue;
+}

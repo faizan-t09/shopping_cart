@@ -29,7 +29,6 @@ export const Card: React.FC<propType> = ({
         className="card"
         onClick={() => {
           setModal(true);
-          console.log("Modal");
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>
@@ -60,7 +59,6 @@ export const Card: React.FC<propType> = ({
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart(item);
-              console.log("Add to cart");
             }}
           >
             Add to cart

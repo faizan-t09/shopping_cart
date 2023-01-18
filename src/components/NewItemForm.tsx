@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Modal.css";
 import { HiXMark } from "react-icons/hi2";
 
-import {itemType} from "../interfaces/Item"
+import { itemType } from "../interfaces/Item";
 
 interface newItemProps {
   formOpen: boolean;
@@ -19,8 +19,8 @@ export const NewItemForm: React.FC<newItemProps> = ({
     title: "",
     desc: "",
     imgsrc: "",
-    price:"",
-    wishlisted:false
+    price: 0,
+    wishlisted: false,
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,18 +29,22 @@ export const NewItemForm: React.FC<newItemProps> = ({
     });
   };
 
-  const addItem = (event: React.FormEvent) => {
-    event.preventDefault();
-    addNewItem(form);
+  const clearForm = () => {
     setForm((prev) => {
       return {
         title: "",
         desc: "",
         imgsrc: "",
-        price:"",
-        wishlisted:false
+        price: 0,
+        wishlisted: false,
       };
     });
+  };
+
+  const addItem = (event: React.FormEvent) => {
+    event.preventDefault();
+    addNewItem(form);
+    clearForm();
     closeForm();
   };
 
@@ -48,19 +52,23 @@ export const NewItemForm: React.FC<newItemProps> = ({
   return (
     <div className="modal-container">
       <div className="modal">
-        <HiXMark
-          className="close-icon"
-          size="30px"
-          color="red"
-          style={{cursor:"pointer"}}
-          onClick={() => {
-            closeForm();
-          }}
-        />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h1 style={{ marginBottom: "10px" }}>New item.</h1>
+          <HiXMark
+            className="close-icon"
+            size="30px"
+            color="red"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              closeForm();
+            }}
+          />
+        </div>
         <form onSubmit={addItem}>
           <div>
             <label>Title : </label>
             <input
+              className="form-input"
               name="title"
               type="text"
               value={form.title}
@@ -70,6 +78,7 @@ export const NewItemForm: React.FC<newItemProps> = ({
           <div>
             <label>Description : </label>
             <input
+              className="form-input"
               name="desc"
               type="text"
               value={form.desc}
@@ -79,8 +88,9 @@ export const NewItemForm: React.FC<newItemProps> = ({
           <div>
             <label>Price : </label>
             <input
+              className="form-input"
               name="price"
-              type="text"
+              type="number"
               value={form.price}
               onChange={handleChange}
             ></input>
@@ -88,6 +98,7 @@ export const NewItemForm: React.FC<newItemProps> = ({
           <div>
             <label>Image Url : </label>
             <input
+              className="form-input"
               name="imgsrc"
               type="text"
               value={form.imgsrc}
@@ -96,14 +107,9 @@ export const NewItemForm: React.FC<newItemProps> = ({
           </div>
           <div className="form-actions">
             <button
+              type="reset"
               onClick={() => {
-                setForm({
-                  title: "",
-                  desc: "",
-                  imgsrc: "",
-                  price:"",
-                  wishlisted:false
-                });
+                clearForm();
               }}
             >
               Clear

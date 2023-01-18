@@ -25,7 +25,6 @@ export const CartCard: React.FC<propType> = ({
         className="card"
         onClick={() => {
           setModal(true);
-          console.log("Modal");
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>
@@ -42,7 +41,10 @@ export const CartCard: React.FC<propType> = ({
         )}
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
-        <p>{item.price}/-</p>
+        <p>{item.price * item.count!}/-</p>
+        <p>
+          <b>Quantity :{item.count}</b>
+        </p>
       </div>
       <Modal
         open={modal}

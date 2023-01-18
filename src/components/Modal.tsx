@@ -1,11 +1,7 @@
 import React from "react";
 import "./Modal.css";
 
-interface itemType {
-  title: string;
-  desc: string;
-  imgsrc: string;
-}
+import { itemType } from "src/interfaces/Item";
 
 interface modalProps {
   open: boolean;
@@ -25,6 +21,7 @@ export const Modal: React.FC<modalProps> = ({
         <img src={item.imgsrc} alt="product visual" />
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
+        <p>{item.price}/-</p>
         <button onClick={closeModal}>Close</button>
       </div>
     </div>
