@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
-import { Card } from "./components/Card";
-import { CartCard } from "./components/CartCard";
-import { NewItemForm } from "./components/NewItemForm";
-import { Header } from "./components/Header";
+import { HomePage } from "./pages/HomePage";
+import { AdminPage } from "./pages/AdminPage";
+import { ShopPage } from "./pages/ShopPage";
+import { CartPage } from "./pages/CartPage";
 
 import { itemType } from "./interfaces/Item";
 
@@ -43,9 +44,6 @@ function App(): JSX.Element {
   const [cart, setCart] = useState<itemType[]>(
     JSON.parse(localStorage.getItem("Cart") || "[]")
   );
-
-  //useState to keep track of form opened or closed
-  const [formOpen, setFormOpen] = useState<boolean>(false);
 
   //Each time cart items are changed the updated cart items are written onto local storage
   useEffect(() => {
@@ -99,10 +97,10 @@ function App(): JSX.Element {
           return cartItem;
         });
       });
-    }else{
-      setCart((prev)=>{
-        return prev.filter((cartItem)=>cartItem.title!==itemTitle)
-      })
+    } else {
+      setCart((prev) => {
+        return prev.filter((cartItem) => cartItem.title !== itemTitle);
+      });
     }
   };
 
@@ -120,63 +118,44 @@ function App(): JSX.Element {
 
   return (
     <div className="App">
-      <Header del={del} setDel={setDel} />
-
-      <div className="section-container">
-        <div className="section">
-          <h1 className="section-heading">
-            Items
-            <button
-              onClick={() => {
-                setFormOpen(true);
-              }}
-            >
-              Add Item +
-            </button>
-          </h1>
-          <div className="card-container">
-            {items?.map((item) => {
-              return (
-                <Card
-                  key={item?.imgsrc}
-                  item={item}
-                  del={del}
-                  deleteItem={deleteItem}
-                  onAddToCart={onAddToCart}
-                  toggleWishlist={toggleWishlist}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className="section">
-          <h1 className="section-heading">Cart</h1>
-          <div className="card-container">
-            {cart.length ? (
-              cart?.map((item: itemType) => {
-                return (
-                  <CartCard
-                    key={item.imgsrc}
-                    item={item}
-                    del={del}
-                    deleteItem={onRemoveFromCart}
-                  />
-                );
-              })
-            ) : (
-              <h1 className="cart-placeholder">No items in cart.</h1>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <NewItemForm
-        formOpen={formOpen}
-        closeForm={() => {
-          setFormOpen(false);
-        }}
-        addNewItem={addNewItem}
-      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage
+              items={items}
+              del={del}
+              deleteItem={deleteItem}
+              onAddToCart={onAddToCart}
+              toggleWishlist={toggleWishlist}
+              setDel={setDel}
+            />
+          }
+        />
+        <Route path="/admin" element={<AdminPage addNewItem={addNewItem} />} />
+        <Route
+          path="/shop"
+          element={
+            <ShopPage
+              items={items}
+              del={del}
+              deleteItem={deleteItem}
+              onAddToCart={onAddToCart}
+              toggleWishlist={toggleWishlist}
+            />
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <CartPage
+              cart={cart}
+              del={del}
+              onRemoveFromCart={onRemoveFromCart}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

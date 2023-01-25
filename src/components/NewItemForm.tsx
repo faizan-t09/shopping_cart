@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Modal.css";
-import { HiXMark } from "react-icons/hi2";
 
 import { itemType } from "../interfaces/Item";
 
 interface newItemProps {
-  formOpen: boolean;
-  closeForm: () => void;
   addNewItem: (item: itemType) => void;
 }
 
 export const NewItemForm: React.FC<newItemProps> = ({
-  formOpen,
-  closeForm,
   addNewItem,
 }: newItemProps): JSX.Element | null => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<itemType>({
     title: "",
     desc: "",
@@ -45,25 +43,19 @@ export const NewItemForm: React.FC<newItemProps> = ({
     event.preventDefault();
     addNewItem(form);
     clearForm();
-    closeForm();
+    navigate("/");
   };
 
-  if (!formOpen) return null;
+  const inpRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="modal-container">
       <div className="modal">
+        <input ref={inpRef} type="text" value="React Test" disabled />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1 style={{ marginBottom: "10px" }}>New item.</h1>
-          <HiXMark
-            className="close-icon"
-            size="30px"
-            color="red"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              closeForm();
-            }}
-          />
         </div>
+
         <form onSubmit={addItem}>
           <div>
             <label>Title : </label>
@@ -106,6 +98,13 @@ export const NewItemForm: React.FC<newItemProps> = ({
             ></input>
           </div>
           <div className="form-actions">
+            <button
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Back
+            </button>
             <button
               type="reset"
               onClick={() => {
