@@ -1,8 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Card.css";
-import { useState } from "react";
 import { HiXMark } from "react-icons/hi2";
-import { Modal } from "./Modal";
 
 import { itemType } from "../interfaces/Item";
 
@@ -21,14 +20,14 @@ export const Card: React.FC<propType> = ({
   onAddToCart,
   toggleWishlist,
 }: propType): JSX.Element => {
-  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
       <div
         className="card"
         onClick={() => {
-          setModal(true);
+          navigate(`/shop/${item.title}`)
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>
@@ -65,13 +64,6 @@ export const Card: React.FC<propType> = ({
           </button>
         </div>
       </div>
-      <Modal
-        open={modal}
-        closeModal={() => {
-          setModal(false);
-        }}
-        item={item}
-      />
     </>
   );
 };

@@ -91,11 +91,12 @@ export const NewItemForm: React.FC<newItemProps> = ({
   };
 
   const inpRef = useRef<HTMLInputElement>(null);
+  const queryParams = new URLSearchParams(window.location.search)
 
   return (
     <div className="modal-container">
       <div className="modal">
-        <input ref={inpRef} type="text" value="React Test" disabled />
+        <input ref={inpRef} type="text" value={queryParams.get("q") || "React Test"} disabled />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1 style={{ marginBottom: "10px" }}>New item.</h1>
         </div>

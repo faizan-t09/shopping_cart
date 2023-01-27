@@ -6,8 +6,10 @@ import { HomePage } from "./pages/HomePage";
 import { AdminPage } from "./pages/AdminPage";
 import { ShopPage } from "./pages/ShopPage";
 import { CartPage } from "./pages/CartPage";
+import {ProductDetailsPage} from "./pages/ProductDetailsPage"
 
 import { itemType } from "./interfaces/Item";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App(): JSX.Element {
   //useState to keep track of deletion enabled/disabled
@@ -146,6 +148,14 @@ function App(): JSX.Element {
           }
         />
         <Route
+          path="/shop/:productTitle"
+          element={
+            <ProductDetailsPage
+              items={items}
+            />
+          }
+        />
+        <Route
           path="/cart"
           element={
             <CartPage
@@ -155,6 +165,7 @@ function App(): JSX.Element {
             />
           }
         />
+        <Route path='*' element={<NotFoundPage />}/>
       </Routes>
     </div>
   );
