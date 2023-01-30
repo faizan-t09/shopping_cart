@@ -31,7 +31,7 @@ export const CartCard: React.FC<propType> = ({
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              onRemoveFromCart!(item.title);
+              onRemoveFromCart!(item.id);
             }}
           />
         )}

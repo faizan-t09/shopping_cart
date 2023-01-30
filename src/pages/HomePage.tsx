@@ -29,12 +29,14 @@ export const HomePage: React.FC = () => {
           Cart
         </button>
       </div>
+      
       <NavLink to="/admin">
         <button>Add new Item</button>
       </NavLink>
+
       <div className="card-container">
         {items?.map((item) => {
-          return <Card key={item?.imgsrc} item={item} />;
+          return <Card key={item.id} item={item} />;
         })}
       </div>
     </div>

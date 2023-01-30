@@ -8,10 +8,10 @@ export const ShopContext = React.createContext([
     setItems: (value: itemType[] | ((prev: itemType[]) => itemType[])) => {},
     setCart: (value: itemType[] | ((prev: itemType[]) => itemType[])) => {},
     addNewItem: (item: itemType) => {},
-    deleteItem: (itemTitle: string) => {},
+    deleteItem: (itemId: number) => {},
     onAddToCart: (item: itemType) => {},
-    onRemoveFromCart: (itemTitle: string) => {},
-    toggleWishlist: (itemTitle: string) => {},
+    onRemoveFromCart: (itemId: number) => {},
+    toggleWishlist: (itemId: number) => {},
   },
 ]);
 
@@ -24,6 +24,7 @@ export const ShopContextProvider: React.FC<{
   //useState for storing items
   const [items, setItems] = useState<itemType[]>([
     {
+      id:1,
       title: "Book",
       desc: "plain ol book",
       imgsrc:
@@ -32,6 +33,7 @@ export const ShopContextProvider: React.FC<{
       wishlisted: false,
     },
     {
+      id:2,
       title: "cup",
       desc: "To hold your coffee",
       imgsrc: "https://m.media-amazon.com/images/I/715W6s7x9rL._SX450_.jpg",
@@ -39,6 +41,7 @@ export const ShopContextProvider: React.FC<{
       wishlisted: false,
     },
     {
+      id:3,
       title: "chair",
       desc: "To sit comfortably",
       imgsrc:
@@ -65,21 +68,21 @@ export const ShopContextProvider: React.FC<{
       //Adds new item to the items
       addNewItem: (item: itemType): void => {
         setItems((prev) => {
-          return [...prev, item];
+          return [...prev, {...item,id:Math.floor(Math.random()*500)}];
         });
       },
 
       //Removes item from the items
-      deleteItem: (itemTitle: string): void => {
+      deleteItem: (itemId: number): void => {
         setItems((prev) => {
           return prev.filter((currItem) => {
-            return currItem.title !== itemTitle;
+            return currItem.id !== itemId;
           });
         });
         //Removes the item from the cart as well
         setCart((prev) => {
           return prev.filter((currItem) => {
-            return currItem.title !== itemTitle;
+            return currItem.id !== itemId;
           });
         })
       },
@@ -105,13 +108,13 @@ export const ShopContextProvider: React.FC<{
       },
 
       //Removes Item from the cart
-      onRemoveFromCart: (itemTitle: string): void => {
+      onRemoveFromCart: (itemId: number): void => {
         if (
-          cart.filter((cartItem) => cartItem.title === itemTitle)[0].count! > 1
+          cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1
         ) {
           setCart((prev) => {
             return prev.map((cartItem) => {
-              if (cartItem.title === itemTitle) {
+              if (cartItem.id === itemId) {
                 cartItem.count! -= 1;
               }
               return cartItem;
@@ -119,16 +122,16 @@ export const ShopContextProvider: React.FC<{
           });
         } else {
           setCart((prev) => {
-            return prev.filter((cartItem) => cartItem.title !== itemTitle);
+            return prev.filter((cartItem) => cartItem.id !== itemId);
           });
         }
       },
 
       //Toggles wishlist for a item
-      toggleWishlist: (itemTitle: string): void => {
+      toggleWishlist: (itemId: number): void => {
         setItems((prev) => {
           return prev.map((item) => {
-            if (item.title === itemTitle) {
+            if (item.id === itemId) {
               item.wishlisted = !item.wishlisted;
             }
             return item;

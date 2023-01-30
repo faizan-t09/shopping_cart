@@ -1,4 +1,5 @@
 export interface itemType {
+    id:number;
     title: string;
     desc: string;
     imgsrc: string;

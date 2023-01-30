@@ -28,7 +28,7 @@ export const ShopPage: React.FC = () => {
       </div>
       <div className="card-container">
         {items?.map((item) => {
-          return <Card key={item?.imgsrc} item={item} />;
+          return <Card key={item.id} item={item} />;
         })}
       </div>
     </div>

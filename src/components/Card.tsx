@@ -32,7 +32,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem!(item.title);
+              deleteItem!(item.id);
             }}
           />
         )}
@@ -43,7 +43,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              toggleWishlist!(item.title);
+              toggleWishlist!(item.id);
             }}
           >
             {item.wishlisted ? "Added to Wish List" : "Wish list"}

@@ -1,19 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
 import { itemType } from "../interfaces/Item";
+import { ShopContext } from "src/context/ShopContext";
 
-interface newItemProps {
-  addNewItem: (item: itemType) => void;
-}
-
-export const NewItemForm: React.FC<newItemProps> = ({
-  addNewItem,
-}: newItemProps): JSX.Element | null => {
+export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
+  const [{},{ addNewItem }] = useContext(ShopContext);
 
   const [form, setForm] = useState<itemType>({
+    id: 0,
     title: "",
     desc: "",
     imgsrc: "",
@@ -21,7 +18,7 @@ export const NewItemForm: React.FC<newItemProps> = ({
     wishlisted: false,
   });
 
-  const [error, setError] = useState({ title: "", price: "", imgsrc: "" });
+  const [error, setError] = useState({ title: "", price: "", imgsrc: "" })
 
   const validate = () => {
     setError((curr) => {
@@ -51,8 +48,8 @@ export const NewItemForm: React.FC<newItemProps> = ({
     });
   };
 
-  //Debouncing validation 
-  const timeOutId = useRef<ReturnType<typeof setTimeout> | null>(null);
+  //Debouncing validation
+  const timeOutId = useRef<NodeJS.Timeout | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev: itemType) => {
       return { ...prev, [event.target.name]: event.target.value };
@@ -60,13 +57,13 @@ export const NewItemForm: React.FC<newItemProps> = ({
     timeOutId.current && clearTimeout(timeOutId.current);
     timeOutId.current = setTimeout(() => {
       validate();
-      console.log("onChange called and validated");
-    }, 2500);
+    }, 500);
   };
 
   const clearForm = () => {
     setForm((prev) => {
       return {
+        id: NaN,
         title: "",
         desc: "",
         imgsrc: "",
@@ -82,7 +79,7 @@ export const NewItemForm: React.FC<newItemProps> = ({
     setError((curr) => {
       //checking if there is any error in the error object
       if (!Boolean(curr.title || curr.price || curr.imgsrc)) {
-        addNewItem(form);
+        addNewItem!(form);
         clearForm();
         navigate("/");
       }
@@ -91,12 +88,17 @@ export const NewItemForm: React.FC<newItemProps> = ({
   };
 
   const inpRef = useRef<HTMLInputElement>(null);
-  const queryParams = new URLSearchParams(window.location.search)
+  const queryParams = new URLSearchParams(window.location.search);
 
   return (
     <div className="modal-container">
       <div className="modal">
-        <input ref={inpRef} type="text" value={queryParams.get("q") || "React Test"} disabled />
+        <input
+          ref={inpRef}
+          type="text"
+          value={queryParams.get("q") || "React Test"}
+          disabled
+        />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1 style={{ marginBottom: "10px" }}>New item.</h1>
         </div>
@@ -148,7 +150,7 @@ export const NewItemForm: React.FC<newItemProps> = ({
           <div className="form-actions">
             <button
               onClick={() => {
-                navigate("/");
+                navigate(-1);
               }}
             >
               Back
