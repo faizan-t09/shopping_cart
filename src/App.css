@@ -57,3 +57,7 @@ button{
     background-color:#076da8;
     color: aliceblue;
 }
+
+button:active{
+  background-color:#45bbff;
+}

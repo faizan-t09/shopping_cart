@@ -1,20 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { itemType } from "src/interfaces/Item";
 import { CartCard } from "src/components/CartCard";
+import { ShopContext } from "src/context/ShopContext";
 
-interface CartPageProps {
-  cart: itemType[];
-  del: boolean;
-  onRemoveFromCart: (itemTitle: string) => void;
-}
-
-export const CartPage: React.FC<CartPageProps> = ({
-  cart,
-  del,
-  onRemoveFromCart,
-}) => {
+export const CartPage: React.FC = () => {
   const navigate = useNavigate();
+  const [{ cart }] = useContext(ShopContext);
   return (
     <div>
       <div className="form-actions">
@@ -34,16 +26,9 @@ export const CartPage: React.FC<CartPageProps> = ({
         </button>
       </div>
       <div className="card-container">
-        {cart.length ? (
+        {cart!.length ? (
           cart?.map((item: itemType) => {
-            return (
-              <CartCard
-                key={item.imgsrc}
-                item={item}
-                del={true}
-                deleteItem={onRemoveFromCart}
-              />
-            );
+            return <CartCard key={item.imgsrc} item={item} />;
           })
         ) : (
           <h1 className="cart-placeholder">No items in cart.</h1>

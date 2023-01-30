@@ -1,33 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Card.css";
 import { HiXMark } from "react-icons/hi2";
 
 import { itemType } from "../interfaces/Item";
 
+import { ShopContext } from "src/context/ShopContext";
+
 interface propType {
-  del: boolean;
   item: itemType;
-  deleteItem: (itemTitle: string) => void;
-  onAddToCart: (item: itemType) => void;
-  toggleWishlist: (title: string) => void;
 }
 
-export const Card: React.FC<propType> = ({
-  del,
-  item,
-  deleteItem,
-  onAddToCart,
-  toggleWishlist,
-}: propType): JSX.Element => {
+export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
   const navigate = useNavigate();
+  const [{ del }, { deleteItem, toggleWishlist, onAddToCart }] =
+    useContext(ShopContext);
 
   return (
     <>
       <div
         className="card"
         onClick={() => {
-          navigate(`/shop/${item.title}`)
+          navigate(`/shop/${item.title}`);
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>
@@ -38,7 +32,7 @@ export const Card: React.FC<propType> = ({
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem(item.title);
+              deleteItem!(item.title);
             }}
           />
         )}
@@ -49,7 +43,7 @@ export const Card: React.FC<propType> = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              toggleWishlist(item.title);
+              toggleWishlist!(item.title);
             }}
           >
             {item.wishlisted ? "Added to Wish List" : "Wish list"}
@@ -57,7 +51,7 @@ export const Card: React.FC<propType> = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onAddToCart(item);
+              onAddToCart!(item);
             }}
           >
             Add to cart

@@ -1,52 +1,40 @@
-import React from "react";
-import { NavLink,useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Header } from "src/components/Header";
 import { Card } from "src/components/Card";
 
-import { itemType } from "../interfaces/Item";
+import { ShopContext } from "src/context/ShopContext";
 
-interface HomePageProps {
-  items: itemType[];
-  del: boolean;
-  deleteItem: (itemTitle: string) => void;
-  onAddToCart: (item: itemType) => void;
-  toggleWishlist: (title: string) => void;
-  setDel: (value: boolean | ((prev: boolean) => boolean)) => void;
-}
-
-export const HomePage: React.FC<HomePageProps> = ({
-  items,
-  del,
-  deleteItem,
-  onAddToCart,
-  toggleWishlist,
-  setDel,
-}: HomePageProps) => {
-    const navigate = useNavigate();
+export const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const [{ del, items }, { setDel }] = useContext(ShopContext);
 
   return (
     <div>
-      <Header del={del} setDel={setDel} />
+      <Header del={del!} setDel={setDel!} />
 
       <div className="form-actions">
-        <button onClick={()=>{navigate("/shop")}}>Shop</button>
-        <button onClick={()=>{navigate("/cart")}}>Cart</button>
+        <button
+          onClick={() => {
+            navigate("/shop");
+          }}
+        >
+          Shop
+        </button>
+        <button
+          onClick={() => {
+            navigate("/cart");
+          }}
+        >
+          Cart
+        </button>
       </div>
       <NavLink to="/admin">
         <button>Add new Item</button>
       </NavLink>
       <div className="card-container">
         {items?.map((item) => {
-          return (
-            <Card
-              key={item?.imgsrc}
-              item={item}
-              del={del}
-              deleteItem={deleteItem}
-              onAddToCart={onAddToCart}
-              toggleWishlist={toggleWishlist}
-            />
-          );
+          return <Card key={item?.imgsrc} item={item} />;
         })}
       </div>
     </div>

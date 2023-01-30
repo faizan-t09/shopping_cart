@@ -1,19 +1,13 @@
-import React from "react";
-import {useNavigate,useParams} from 'react-router-dom';
+import React, { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../components/Modal.css";
+import { ShopContext } from "src/context/ShopContext";
 
-import { itemType } from "src/interfaces/Item";
-
-interface modalProps {
-  items: itemType[];
-}
-
-export const ProductDetailsPage: React.FC<modalProps> = ({
-  items,
-}: modalProps): JSX.Element | null => {
+export const ProductDetailsPage: React.FC = () => {
   const navigate = useNavigate();
+  const [{ items }] = useContext(ShopContext);
   const params = useParams();
-  const item = items.filter((item)=>item.title===params.productTitle);
+  const item = items!.filter((item) => item.title === params.productTitle);
   return (
     <div className="modal-container">
       <h2>Product Details</h2>
@@ -22,7 +16,13 @@ export const ProductDetailsPage: React.FC<modalProps> = ({
         <h1>{item[0]?.title}</h1>
         <p>{item[0]?.desc}</p>
         <p>{item[0]?.price}/-</p>
-        <button onClick={()=>{navigate(-1)}}>Back</button>
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          Back
+        </button>
       </div>
     </div>
   );

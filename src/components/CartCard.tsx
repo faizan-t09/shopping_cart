@@ -1,29 +1,26 @@
-import React from "react";
-import {useNavigate} from 'react-router-dom';
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Card.css";
 import { HiXMark } from "react-icons/hi2";
-
+import { ShopContext } from "src/context/ShopContext";
 import { itemType } from "../interfaces/Item";
 
 interface propType {
-  del: boolean;
   item: itemType;
-  deleteItem: (itemTitle: string) => void;
 }
 
 export const CartCard: React.FC<propType> = ({
-  del,
   item,
-  deleteItem,
 }: propType): JSX.Element => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [{ del }, { onRemoveFromCart }] = useContext(ShopContext);
 
   return (
     <>
       <div
         className="card"
         onClick={() => {
-          navigate(`/shop/${item.title}`)
+          navigate(`/shop/${item.title}`);
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>
@@ -34,7 +31,7 @@ export const CartCard: React.FC<propType> = ({
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem(item.title);
+              onRemoveFromCart!(item.title);
             }}
           />
         )}

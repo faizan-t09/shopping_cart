@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NewItemForm } from "src/components/NewItemForm";
-import { itemType } from "src/interfaces/Item";
+import { ShopContext } from "src/context/ShopContext";
 
-interface AdminPageProps {
-  addNewItem: (item: itemType) => void;
-}
-
-export const AdminPage: React.FC<AdminPageProps> = ({ addNewItem }) => {
-  return <NewItemForm addNewItem={addNewItem} />;
+export const AdminPage: React.FC = () => {
+  const [{ addNewItem }] = useContext(ShopContext);
+  return <NewItemForm addNewItem={addNewItem!} />;
 };

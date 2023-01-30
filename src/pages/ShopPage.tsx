@@ -1,24 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "src/components/Card";
-import { itemType } from "src/interfaces/Item";
 
-interface ShopPageProps {
-  items: itemType[];
-  del: boolean;
-  deleteItem: (itemTitle: string) => void;
-  onAddToCart: (item: itemType) => void;
-  toggleWishlist: (title: string) => void;
-}
+import { ShopContext } from "src/context/ShopContext";
 
-export const ShopPage: React.FC<ShopPageProps> = ({
-  items,
-  del,
-  deleteItem,
-  onAddToCart,
-  toggleWishlist,
-}) => {
+export const ShopPage: React.FC = () => {
   const navigate = useNavigate();
+  const [{ items }] = useContext(ShopContext);
 
   return (
     <div>
@@ -40,16 +28,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
       </div>
       <div className="card-container">
         {items?.map((item) => {
-          return (
-            <Card
-              key={item?.imgsrc}
-              item={item}
-              del={del}
-              deleteItem={deleteItem}
-              onAddToCart={onAddToCart}
-              toggleWishlist={toggleWishlist}
-            />
-          );
+          return <Card key={item?.imgsrc} item={item} />;
         })}
       </div>
     </div>
