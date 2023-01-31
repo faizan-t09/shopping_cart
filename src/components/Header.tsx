@@ -1,25 +1,15 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-interface headerProps {
-    del : boolean;
-    setDel:(value:boolean|((prev:boolean)=>boolean))=>void;
-}
-
-export const Header: React.FC<headerProps> = ({del,setDel}) => {
+export const Header: React.FC = () => {
   return (
     <div>
-      <header className="App-header">Welcome</header>
-      <label style={{ fontSize: "20px" }}>Delete</label>
-      <input
-        type="checkbox"
-        onChange={() => {
-          setDel((prev) => {
-            return !prev;
-          });
-        }}
-        checked={del}
-      ></input>
+      <header className="App-header">
+        Welcome
+        <NavLink to="/admin">
+          <button style={{fontSize:"0.28em",padding:"0.4em",borderRadius:"1em"}}>Add new Item</button>
+        </NavLink>
+      </header>
     </div>
   );
 };
-

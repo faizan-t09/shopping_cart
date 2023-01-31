@@ -7,7 +7,7 @@ export const ProductDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const [{ items }] = useContext(ShopContext);
   const params = useParams();
-  const item = items!.filter((item) => item.title === params.productTitle);
+  const item = items!.filter((item) => item.id === Number(params.productId));
   return (
     <div className="modal-container">
       <h2>Product Details</h2>

@@ -13,8 +13,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 80px;
+  font-size: 5em;
   color: white;
+  margin-right: 0.22em;
+  margin-left: 0.22em;
+  border-radius: 0.1em;
 }
 
 
@@ -25,6 +28,21 @@
   justify-content: center;
   background-color: #daeaf7;
   height: 100%;
+  margin: 1em;
+  padding: 1.5em;
+  border-radius: 0.3em;
+}
+
+@media screen and (max-width: 720px){
+  .card-container{
+    grid-template-columns: auto auto;
+  }
+}
+
+@media screen and (max-width: 520px){
+  .card-container{
+    grid-template-columns: auto;
+  }
 }
 
 .section-container{
@@ -60,4 +78,43 @@ button{
 
 button:active{
   background-color:#45bbff;
+}
+
+.nav-container{
+  display:flex;
+  justify-content: space-between;
+  background-color: #076da8;
+  margin: 1em;
+  border-radius: 0.3em;
+  color: aliceblue;
+}
+
+.nav-title{
+  font-size: 1.5em;
+  margin:1em;
+}
+
+.nav-link-container{
+  display:flex;
+}
+
+.nav-link{
+  margin:1em;
+  list-style: none;
+  cursor: pointer;
+  color: aliceblue;
+}
+
+.nav-link:hover{
+  color: aquamarine;
+  text-decoration: underline;
+  transition-delay: 100ms;
+}
+
+.nav-link-selected{
+  margin:1em;
+  list-style: none;
+  cursor: pointer;
+  color: aquamarine;
+  text-decoration: underline;
 }

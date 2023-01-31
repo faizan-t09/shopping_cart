@@ -20,7 +20,7 @@ export const CartCard: React.FC<propType> = ({
       <div
         className="card"
         onClick={() => {
-          navigate(`/shop/${item.title}`);
+          navigate(`/shop/${item.id}`);
         }}
       >
         <img src={item.imgsrc} alt="product visual"></img>

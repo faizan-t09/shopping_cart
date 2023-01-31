@@ -8,15 +8,17 @@ import { ShopPage } from "./pages/ShopPage";
 import { CartPage } from "./pages/CartPage";
 import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import NavBar from "./components/NavBar";
 
 function App(): JSX.Element {
   return (
     <div className="App">
+      <NavBar/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/shop" element={<ShopPage />} />
-        <Route path="/shop/:productTitle" element={<ProductDetailsPage />} />
+        <Route path="/shop/:productId" element={<ProductDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
