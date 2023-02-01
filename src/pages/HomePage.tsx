@@ -5,7 +5,7 @@ import { Card } from "src/components/Card";
 import { ShopContext } from "src/context/ShopContext";
 
 export const HomePage: React.FC = () => {
-  const [{ items }] = useContext(ShopContext);
+  const { items } = useContext(ShopContext);
 
   return (
     <div>

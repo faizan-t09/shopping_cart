@@ -7,7 +7,7 @@ import { ShopContext } from "src/context/ShopContext";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
-  const [{},{ addNewItem }] = useContext(ShopContext);
+  const { setItems } = useContext(ShopContext);
 
   const [form, setForm] = useState<itemType>({
     id: 0,
@@ -18,7 +18,14 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     wishlisted: false,
   });
 
-  const [error, setError] = useState({ title: "", price: "", imgsrc: "" })
+  const [error, setError] = useState({ title: "", price: "", imgsrc: "" });
+
+  //Adds new item to the items
+  const addNewItem = (item: itemType): void => {
+    setItems((prev) => {
+      return [...prev, { ...item, id: Math.floor(Math.random() * 500) }];
+    });
+  };
 
   const validate = () => {
     setError((curr) => {
@@ -40,9 +47,9 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
         currentErrors.price = "Price must be greater than 0";
       }
 
-      if (!form.imgsrc) {
-        currentErrors.imgsrc = "Image Url is required";
-      }
+      // if (!form.imgsrc) {
+      //   currentErrors.imgsrc = "Image Url is required";
+      // }
 
       return currentErrors;
     });
@@ -100,7 +107,15 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
           disabled
         />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h1 style={{ marginBottom: "10px" }}>New item.</h1>
+          <h1
+            style={{
+              marginBottom: "10px",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            New item.
+          </h1>
         </div>
 
         <form onSubmit={addItem}>
@@ -112,6 +127,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.title}
               onChange={handleChange}
+              onBlur={validate}
             ></input>
           </div>
           {error.title}
@@ -133,6 +149,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="number"
               value={form.price}
               onChange={handleChange}
+              onBlur={validate}
             ></input>
           </div>
           {error.price}
@@ -144,6 +161,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.imgsrc}
               onChange={handleChange}
+              onBlur={validate}
             ></input>
           </div>
           {error.imgsrc}

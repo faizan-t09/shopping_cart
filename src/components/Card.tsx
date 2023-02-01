@@ -13,8 +13,54 @@ interface propType {
 
 export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
   const navigate = useNavigate();
-  const [{ del }, { deleteItem, toggleWishlist, onAddToCart }] =
-    useContext(ShopContext);
+  const { del, cart, setItems, setCart } = useContext(ShopContext);
+
+  //Removes item from the items
+  const deleteItem = (itemId: number): void => {
+    setItems((prev) => {
+      return prev.filter((currItem) => {
+        return currItem.id !== itemId;
+      });
+    });
+    //Removes the item from the cart as well
+    setCart((prev) => {
+      return prev.filter((currItem) => {
+        return currItem.id !== itemId;
+      });
+    });
+  };
+
+  //Toggles wishlist for a item
+  const toggleWishlist = (itemId: number): void => {
+    setItems((prev) => {
+      return prev.map((item) => {
+        if (item.id === itemId) {
+          item.wishlisted = !item.wishlisted;
+        }
+        return item;
+      });
+    });
+  };
+
+  //Adds a item to the cart
+  const onAddToCart = (item: itemType): void => {
+    if (
+      cart.filter((cartItem) => {
+        return cartItem.title === item.title;
+      }).length === 0
+    ) {
+      setCart([...cart, { ...item, count: 1 }]);
+    } else {
+      setCart((prev) => {
+        return prev.map((cartItem: itemType) => {
+          if (cartItem.title === item.title) {
+            cartItem.count! += 1;
+          }
+          return cartItem;
+        });
+      });
+    }
+  };
 
   return (
     <>

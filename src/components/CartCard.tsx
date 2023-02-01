@@ -13,7 +13,25 @@ export const CartCard: React.FC<propType> = ({
   item,
 }: propType): JSX.Element => {
   const navigate = useNavigate();
-  const [{ del }, { onRemoveFromCart }] = useContext(ShopContext);
+  const { del, cart, setCart } = useContext(ShopContext);
+
+  //Removes Item from the cart
+  const onRemoveFromCart = (itemId: number): void => {
+    if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
+      setCart((prev) => {
+        return prev.map((cartItem) => {
+          if (cartItem.id === itemId) {
+            cartItem.count! -= 1;
+          }
+          return cartItem;
+        });
+      });
+    } else {
+      setCart((prev) => {
+        return prev.filter((cartItem) => cartItem.id !== itemId);
+      });
+    }
+  };
 
   return (
     <>

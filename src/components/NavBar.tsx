@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
-  const [{ del }, { setDel }] = useContext(ShopContext);
+  const { del, setDel } = useContext(ShopContext);
   return (
     <div className="nav-container">
       <div className="nav-title">Shopping Cart</div>

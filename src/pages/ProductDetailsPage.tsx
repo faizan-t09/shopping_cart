@@ -1,13 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/Modal.css";
 import { ShopContext } from "src/context/ShopContext";
 
 export const ProductDetailsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [{ items }] = useContext(ShopContext);
+  const { items } = useContext(ShopContext);
   const params = useParams();
   const item = items!.filter((item) => item.id === Number(params.productId));
+  useEffect(() => {
+    if (item.length === 0) {
+      navigate("/notfound");
+    }
+  });
   return (
     <div className="modal-container">
       <h2>Product Details</h2>

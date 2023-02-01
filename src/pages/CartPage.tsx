@@ -4,7 +4,7 @@ import { CartCard } from "src/components/CartCard";
 import { ShopContext } from "src/context/ShopContext";
 
 export const CartPage: React.FC = () => {
-  const [{ cart }] = useContext(ShopContext);
+  const { cart } = useContext(ShopContext);
   return (
     <div>
       <div className="card-container">
