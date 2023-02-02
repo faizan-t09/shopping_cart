@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -10,10 +10,27 @@ import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/NavBar";
 
+import { ShopContext } from "./context/ShopContext";
+import { itemType } from "./interfaces/Item";
+
 function App(): JSX.Element {
+  const { setItems } = useContext(ShopContext);
+
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) =>
+        setItems(
+          data.map((item: itemType) => {
+            return { ...item, wishlisted: false };
+          })
+        )
+      );
+  }, []);
+
   return (
     <div className="App">
-      <NavBar/>
+      <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />

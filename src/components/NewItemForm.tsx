@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
@@ -12,8 +12,8 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
   const [form, setForm] = useState<itemType>({
     id: 0,
     title: "",
-    desc: "",
-    imgsrc: "",
+    description: "",
+    image: "",
     price: 0,
     wishlisted: false,
   });
@@ -21,13 +21,26 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
   const [error, setError] = useState({ title: "", price: "", imgsrc: "" });
 
   //Adds new item to the items
-  const addNewItem = (item: itemType): void => {
+  const addNewItem = async (item: itemType): Promise<void> => {
+    const res = await fetch("https://fakestoreapi.com/products", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "test product",
+        price: 13.5,
+        description: "lorem ipsum set",
+        image: "https://i.pravatar.cc",
+        category: "electronic",
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
     setItems((prev) => {
       return [...prev, { ...item, id: Math.floor(Math.random() * 500) }];
     });
   };
 
   const validate = () => {
+    let errorsPresent = false;
     setError((curr) => {
       let currentErrors = {
         title: "",
@@ -37,22 +50,28 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
 
       if (!form.title) {
         currentErrors.title = "Title is required";
+        errorsPresent = true;
       } else if (form.title.length < 3) {
         currentErrors.title = "Title must be longer than 3 chars";
+        errorsPresent = true;
       }
 
       if (!form.price) {
         currentErrors.price = "Price is required";
+        errorsPresent = true;
       } else if (Number(form.price) <= 0) {
         currentErrors.price = "Price must be greater than 0";
+        errorsPresent = true;
       }
 
-      // if (!form.imgsrc) {
-      //   currentErrors.imgsrc = "Image Url is required";
-      // }
+      if (!form.image) {
+        currentErrors.imgsrc = "Image Url is required";
+        errorsPresent = true;
+      }
 
       return currentErrors;
     });
+    return errorsPresent;
   };
 
   //Debouncing validation
@@ -72,8 +91,8 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
       return {
         id: NaN,
         title: "",
-        desc: "",
-        imgsrc: "",
+        description: "",
+        image: "",
         price: 0,
         wishlisted: false,
       };
@@ -82,16 +101,14 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
-    validate();
-    setError((curr) => {
-      //checking if there is any error in the error object
-      if (!Boolean(curr.title || curr.price || curr.imgsrc)) {
-        addNewItem!(form);
-        clearForm();
-        navigate("/");
-      }
-      return curr;
-    });
+
+    if (!validate()) {
+      addNewItem(form);
+      clearForm();
+      navigate("/");
+    }else{
+      console.log("Erros in form, not submitted.")
+    }
   };
 
   const inpRef = useRef<HTMLInputElement>(null);
@@ -130,14 +147,14 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               onBlur={validate}
             ></input>
           </div>
-          {error.title}
+          <p>{error.title}</p>
           <div>
             <label>Description : </label>
             <input
               className="form-input"
-              name="desc"
+              name="description"
               type="text"
-              value={form.desc}
+              value={form.description}
               onChange={handleChange}
             ></input>
           </div>
@@ -152,19 +169,19 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               onBlur={validate}
             ></input>
           </div>
-          {error.price}
+          <p>{error.price}</p>
           <div>
             <label>Image Url : </label>
             <input
               className="form-input"
-              name="imgsrc"
+              name="image"
               type="text"
-              value={form.imgsrc}
+              value={form.image}
               onChange={handleChange}
               onBlur={validate}
             ></input>
           </div>
-          {error.imgsrc}
+          <p>{error.imgsrc}</p>
           <div className="form-actions">
             <button
               onClick={() => {

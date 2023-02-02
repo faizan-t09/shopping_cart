@@ -1,8 +1,8 @@
 export interface itemType {
     id:number;
     title: string;
-    desc: string;
-    imgsrc: string;
+    description: string;
+    image: string;
     price:number;
     wishlisted:boolean;
     count?:number

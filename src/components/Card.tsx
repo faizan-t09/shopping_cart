@@ -62,6 +62,23 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
     }
   };
 
+  const postAddToCart = () => {
+    fetch("https://fakestoreapi.com/carts/7", {
+      method: "PUT",
+      body: JSON.stringify({
+        userId: 3,
+        date: 2019 - 12 - 10,
+        products: [{ productId: 1, quantity: 3 }],
+      }),
+    })
+      .then(() => {
+        console.log("Added to cart sucessfully");
+      })
+      .catch(() => {
+        console.log("Failed to add to cart");
+      });
+  };
+
   return (
     <>
       <div
@@ -70,7 +87,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
           navigate(`/shop/${item.id}`);
         }}
       >
-        <img src={item.imgsrc} alt="product visual"></img>
+        <img src={item.image} alt="product visual"></img>
         {del && (
           <HiXMark
             className="delete-icon"
@@ -82,8 +99,8 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
             }}
           />
         )}
-        <h1>{item.title}</h1>
-        <p>{item.desc}</p>
+        <h4>{item.title.slice(0, 40) + "..."}</h4>
+        <p>{item.description.slice(0, 100) + "..."}</p>
         <p>{item.price}/-</p>
         <div className="actions">
           <button
@@ -98,6 +115,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart!(item);
+              postAddToCart();
             }}
           >
             Add to cart

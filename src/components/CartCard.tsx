@@ -41,7 +41,7 @@ export const CartCard: React.FC<propType> = ({
           navigate(`/shop/${item.id}`);
         }}
       >
-        <img src={item.imgsrc} alt="product visual"></img>
+        <img src={item.image} alt="product visual"></img>
         {del && (
           <HiXMark
             className="delete-icon"
@@ -53,8 +53,8 @@ export const CartCard: React.FC<propType> = ({
             }}
           />
         )}
-        <h1>{item.title}</h1>
-        <p>{item.desc}</p>
+        <h1>{item.title.slice(0,40)+"..."}</h1>
+        <p>{item.description.slice(0,100)+"..."}</p>
         <p>{item.price * item.count!}/-</p>
         <p>
           <b>Quantity :{item.count}</b>
