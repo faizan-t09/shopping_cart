@@ -18,7 +18,7 @@ function App(): JSX.Element {
   const { setItems } = useContext(ShopContext);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/products`)
       .then((res) => res.json())
       .then((data) =>
         setItems(

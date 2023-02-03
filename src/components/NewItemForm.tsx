@@ -22,7 +22,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
 
   //Adds new item to the items
   const addNewItem = async (item: itemType): Promise<void> => {
-    const res = await fetch("https://fakestoreapi.com/products", {
+    const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/products`, {
       method: "POST",
       body: JSON.stringify({
         title: "test product",

@@ -63,7 +63,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
   };
 
   const postAddToCart = () => {
-    fetch("https://fakestoreapi.com/carts/7", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/carts/7`, {
       method: "PUT",
       body: JSON.stringify({
         userId: 3,
