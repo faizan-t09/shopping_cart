@@ -15,20 +15,26 @@ import { ShopContext } from "./context/ShopContext";
 import { itemType } from "./interfaces/Item";
 
 function App(): JSX.Element {
-  const { setItems } = useContext(ShopContext);
+  const { setItems, setCart } = useContext(ShopContext);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/products`)
+    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
       .then((res) => res.json())
-      .then((data) =>
-        setItems(
-          data.map((item: itemType) => {
-            return { ...item, wishlisted: false };
-          })
-        )
-      )
+      .then((data) => setItems(data))
       .then(() => {
         setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(`Error : ${error}`);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
+      .then((res) => res.json())
+      .then((data) => setCart(data))
+      .catch((error) => {
+        console.log(`Error : ${error}`);
       });
   }, []);
 

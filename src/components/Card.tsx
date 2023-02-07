@@ -28,6 +28,20 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
         return currItem.id !== itemId;
       });
     });
+    deleteItemFromDb(itemId);
+  };
+
+  const deleteItemFromDb = async (id: Number) => {
+    await fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   //Toggles wishlist for a item
@@ -40,20 +54,21 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
         return item;
       });
     });
+    updateWishlistOnDb(itemId);
   };
 
   //Adds a item to the cart
   const onAddToCart = (item: itemType): void => {
     if (
       cart.filter((cartItem) => {
-        return cartItem.title === item.title;
+        return cartItem.id === item.id;
       }).length === 0
     ) {
       setCart([...cart, { ...item, count: 1 }]);
     } else {
       setCart((prev) => {
         return prev.map((cartItem: itemType) => {
-          if (cartItem.title === item.title) {
+          if (cartItem.id === item.id) {
             cartItem.count! += 1;
           }
           return cartItem;
@@ -62,20 +77,27 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
     }
   };
 
-  const postAddToCart = () => {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/carts/7`, {
-      method: "PUT",
-      body: JSON.stringify({
-        userId: 3,
-        date: 2019 - 12 - 10,
-        products: [{ productId: 1, quantity: 3 }],
-      }),
+  const postAddToCart = (id: Number) => {
+    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart/${id}`, {
+      method: "POST",
     })
       .then(() => {
         console.log("Added to cart sucessfully");
       })
       .catch(() => {
         console.log("Failed to add to cart");
+      });
+  };
+
+  const updateWishlistOnDb = (id: Number) => {
+    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/wishlist/${id}`, {
+      method: "POST",
+    })
+      .then(() => {
+        console.log("Toggled wishlist sucessfully");
+      })
+      .catch(() => {
+        console.log("Failed toggled wishlist");
       });
   };
 
@@ -109,13 +131,13 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
               toggleWishlist!(item.id);
             }}
           >
-            {item.wishlisted ? "Added to Wish List" : "Wish list"}
+            {item.wishlisted ? "WishListed" : "Add to WishList"}
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart!(item);
-              postAddToCart();
+              postAddToCart(item.id);
             }}
           >
             Add to cart

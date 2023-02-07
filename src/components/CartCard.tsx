@@ -31,6 +31,19 @@ export const CartCard: React.FC<propType> = ({
         return prev.filter((cartItem) => cartItem.id !== itemId);
       });
     }
+    removeFromDbCart(itemId);
+  };
+
+  const removeFromDbCart = (id: Number) => {
+    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart/${id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        console.log("Removed from cart sucessfully");
+      })
+      .catch(() => {
+        console.log("Failed to remove from cart");
+      });
   };
 
   return (
@@ -53,8 +66,8 @@ export const CartCard: React.FC<propType> = ({
             }}
           />
         )}
-        <h1>{item.title.slice(0,40)+"..."}</h1>
-        <p>{item.description.slice(0,100)+"..."}</p>
+        <h1>{item.title.slice(0, 40) + "..."}</h1>
+        <p>{item.description.slice(0, 100) + "..."}</p>
         <p>{item.price * item.count!}/-</p>
         <p>
           <b>Quantity :{item.count}</b>

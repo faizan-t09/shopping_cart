@@ -12,7 +12,7 @@ export const ProductDetailsPage: React.FC = () => {
   );
   useEffect(() => {
     if (items.length === 0) {
-      fetch(`${process.env.REACT_APP_API_BASE_URL}/products/${params.productId}`)
+      fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/${params.productId}`)
         .then((res) => res.json())
         .then((data) => setItem([data]))
         .catch((error) => {

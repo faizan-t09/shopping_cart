@@ -22,20 +22,18 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
 
   //Adds new item to the items
   const addNewItem = async (item: itemType): Promise<void> => {
-    const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/products`, {
+    const newId = Math.floor(Math.random() * 500);
+    const res = await fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/addProduct`, {
       method: "POST",
-      body: JSON.stringify({
-        title: "test product",
-        price: 13.5,
-        description: "lorem ipsum set",
-        image: "https://i.pravatar.cc",
-        category: "electronic",
-      }),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({ ...item, id: newId })
     });
-    const data = await res.json();
+    const data = await res.text();
     console.log(data);
     setItems((prev) => {
-      return [...prev, { ...item, id: Math.floor(Math.random() * 500) }];
+      return [...prev, { ...item, id: newId }];
     });
   };
 
@@ -106,8 +104,6 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
       addNewItem(form);
       clearForm();
       navigate("/");
-    }else{
-      console.log("Erros in form, not submitted.")
     }
   };
 
