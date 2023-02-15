@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Modal.css";
+import "./form&Details.css";
 
 import { ShopContext } from "src/context/ShopContext";
 import { toast } from "react-toastify";

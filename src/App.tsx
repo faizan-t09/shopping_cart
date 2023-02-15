@@ -8,8 +8,8 @@ import { ShopPage } from "./pages/ShopPage";
 import { CartPage } from "./pages/CartPage";
 import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import NavBar from "./components/NavBar";
-import { LoadingHOC } from "./components/LoadingHOC";
+import NavBar from "./components/NavBar/NavBar";
+import { LoadingHOC } from "./components/LoadingHigherOrderComponent/LoadingHOC";
 
 import { ShopContext } from "./context/ShopContext";
 import { ToastContainer, toast } from "react-toastify";

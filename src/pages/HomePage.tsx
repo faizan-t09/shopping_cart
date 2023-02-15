@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Header } from "src/components/Header";
-import { Card } from "src/components/Card";
+import { Header } from "src/components/Header/Header";
+import { Card } from "src/components/Card/Card";
 
 import { ShopContext } from "src/context/ShopContext";
 
