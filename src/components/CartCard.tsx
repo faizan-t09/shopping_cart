@@ -13,37 +13,28 @@ export const CartCard: React.FC<propType> = ({
   item,
 }: propType): JSX.Element => {
   const navigate = useNavigate();
-  const { del, cart, setCart } = useContext(ShopContext);
+  const { del, cart, dispatchCart } = useContext(ShopContext);
 
   //Removes Item from the cart
   const onRemoveFromCart = (itemId: number): void => {
-    if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
-      setCart((prev) => {
-        return prev.map((cartItem) => {
-          if (cartItem.id === itemId) {
-            cartItem.count! -= 1;
-          }
-          return cartItem;
-        });
+    removeFromDbCart(itemId)
+      .then(() => {
+        if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
+          dispatchCart({
+            type: "Decreament quantity",
+            payload: { itemId: item.id },
+          });
+        } else {
+          dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+        }
+      })
+      .catch(() => {
       });
-    } else {
-      setCart((prev) => {
-        return prev.filter((cartItem) => cartItem.id !== itemId);
-      });
-    }
-    removeFromDbCart(itemId);
   };
 
   const removeFromDbCart = (id: Number) => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart/${id}`, {
       method: "DELETE",
-    })
-      .then(() => {
-        console.log("Removed from cart sucessfully");
-      })
-      .catch(() => {
-        console.log("Failed to remove from cart");
-      });
+    });
   };
 
   return (

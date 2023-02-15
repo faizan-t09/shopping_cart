@@ -15,24 +15,24 @@ import { ShopContext } from "./context/ShopContext";
 import { itemType } from "./interfaces/Item";
 
 function App(): JSX.Element {
-  const { setItems, setCart } = useContext(ShopContext);
+  const { dispatchItems, dispatchCart } = useContext(ShopContext);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
       .then((res) => res.json())
-      .then((data) => setItems(data))
-      .then(() => {
-        setIsLoading(false);
-      })
+      .then((data) => dispatchItems({ type: "Initialize", payload: data }))
       .catch((error) => {
         console.log(`Error : ${error}`);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
       .then((res) => res.json())
-      .then((data) => setCart(data))
+      .then((data) => dispatchCart({ type: "Initialize", payload: data }))
       .catch((error) => {
         console.log(`Error : ${error}`);
       });

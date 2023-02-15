@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
-  const { del, setDel } = useContext(ShopContext);
+  const { del, dispatchDel } = useContext(ShopContext);
   return (
     <div className="nav-container">
       <div className="nav-title">Shopping Cart</div>
@@ -13,9 +13,7 @@ const NavBar = () => {
           <input
             type="checkbox"
             onChange={() => {
-              setDel!((prev) => {
-                return !prev;
-              });
+              dispatchDel({ type: "Toggle" });
             }}
             checked={del}
           ></input>

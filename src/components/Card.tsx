@@ -13,48 +13,44 @@ interface propType {
 
 export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
   const navigate = useNavigate();
-  const { del, cart, setItems, setCart } = useContext(ShopContext);
+  const { del, cart, dispatchItems, dispatchCart } = useContext(ShopContext);
 
   //Removes item from the items
   const deleteItem = (itemId: number): void => {
-    setItems((prev) => {
-      return prev.filter((currItem) => {
-        return currItem.id !== itemId;
-      });
-    });
-    //Removes the item from the cart as well
-    setCart((prev) => {
-      return prev.filter((currItem) => {
-        return currItem.id !== itemId;
-      });
-    });
-    deleteItemFromDb(itemId);
-  };
-
-  const deleteItemFromDb = async (id: Number) => {
-    await fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/${id}`, {
-      method: "DELETE",
-    })
       .then((res) => res.text())
       .then((data) => {
         console.log(data);
+        dispatchItems({ type: "Delete", payload: { itemId: itemId } });
+        //Removes the item from the cart as well
+        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  const deleteItemFromDb = async (id: Number) => {
+    return await fetch(
+      `${process.env.REACT_APP_MY_API_BASE_URL}/product/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+  };
+
   //Toggles wishlist for a item
   const toggleWishlist = (itemId: number): void => {
-    setItems((prev) => {
-      return prev.map((item) => {
-        if (item.id === itemId) {
-          item.wishlisted = !item.wishlisted;
-        }
-        return item;
+    fetch(
+      `${process.env.REACT_APP_MY_API_BASE_URL}/product/wishlist/${itemId}`,
+      {
+        method: "POST",
+      }
+    )
+      .then(() => {
+        dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
+      })
+      .catch(() => {
       });
-    });
-    updateWishlistOnDb(itemId);
   };
 
   //Adds a item to the cart
@@ -64,33 +60,17 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
         return cartItem.id === item.id;
       }).length === 0
     ) {
-      setCart([...cart, { ...item, count: 1 }]);
+      dispatchCart({ type: "Add", payload: { ...item, count: 1 } });
     } else {
-      setCart((prev) => {
-        return prev.map((cartItem: itemType) => {
-          if (cartItem.id === item.id) {
-            cartItem.count! += 1;
-          }
-          return cartItem;
-        });
+      dispatchCart({
+        type: "Increament quantity",
+        payload: { itemId: item.id },
       });
     }
   };
 
   const postAddToCart = (id: Number) => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart/${id}`, {
-      method: "POST",
-    })
-      .then(() => {
-        console.log("Added to cart sucessfully");
-      })
-      .catch(() => {
-        console.log("Failed to add to cart");
-      });
-  };
-
-  const updateWishlistOnDb = (id: Number) => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/wishlist/${id}`, {
       method: "POST",
     })
       .then(() => {
