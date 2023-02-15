@@ -9,9 +9,11 @@ export const ShopPage: React.FC = () => {
   return (
     <div>
       <div className="card-container">
-        {items?.map((item) => {
-          return <Card key={item.id} item={item} />;
-        })}
+        {items.length
+          ? items?.map((item) => {
+              return <Card key={item.id} item={item} />;
+            })
+          : "No Items to Display"}
       </div>
     </div>
   );

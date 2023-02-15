@@ -12,9 +12,9 @@ export const HomePage: React.FC = () => {
       <Header />
 
       <div className="card-container">
-        {items?.map((item) => {
+        {items.length ? items?.map((item) => {
           return <Card key={item.id} item={item} />;
-        })}
+        }):"No Items to Display"}
       </div>
     </div>
   );
