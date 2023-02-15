@@ -6,6 +6,7 @@ import { HiXMark } from "react-icons/hi2";
 import { itemType } from "../interfaces/Item";
 
 import { ShopContext } from "src/context/ShopContext";
+import { toast } from "react-toastify";
 
 interface propType {
   item: itemType;
@@ -19,13 +20,13 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
   const deleteItem = (itemId: number): void => {
       .then((res) => res.text())
       .then((data) => {
-        console.log(data);
+        toast.success(`Deleted item.`);
         dispatchItems({ type: "Delete", payload: { itemId: itemId } });
         //Removes the item from the cart as well
         dispatchCart({ type: "Delete", payload: { itemId: itemId } });
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(`Failed to Delete item.`);
       });
   };
 
@@ -47,9 +48,11 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
       }
     )
       .then(() => {
+        toast.success("Toggled wishlist");
         dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
       })
       .catch(() => {
+        toast.error("Failed to toggle wishlist");
       });
   };
 
@@ -74,10 +77,10 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
       method: "POST",
     })
       .then(() => {
-        console.log("Toggled wishlist sucessfully");
+        toast.success("Added to cart sucessfully");
       })
       .catch(() => {
-        console.log("Failed toggled wishlist");
+        toast.error("Failed to add to cart");
       });
   };
 

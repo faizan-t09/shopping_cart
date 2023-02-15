@@ -13,6 +13,8 @@ import { LoadingHOC } from "./components/LoadingHOC";
 
 import { ShopContext } from "./context/ShopContext";
 import { itemType } from "./interfaces/Item";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App(): JSX.Element {
   const { dispatchItems, dispatchCart } = useContext(ShopContext);
@@ -22,7 +24,7 @@ function App(): JSX.Element {
       .then((res) => res.json())
       .then((data) => dispatchItems({ type: "Initialize", payload: data }))
       .catch((error) => {
-        console.log(`Error : ${error}`);
+        toast.error(`Failed to fetch items.`);
       })
       .finally(() => {
         setIsLoading(false);
@@ -34,13 +36,25 @@ function App(): JSX.Element {
       .then((res) => res.json())
       .then((data) => dispatchCart({ type: "Initialize", payload: data }))
       .catch((error) => {
-        console.log(`Error : ${error}`);
+        toast.error(`Failed to fetch Cart.`);
       });
   }, []);
 
   return (
     <div className="App">
       <NavBar />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         <Route
           path="/"

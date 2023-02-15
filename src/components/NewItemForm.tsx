@@ -4,6 +4,7 @@ import "./Modal.css";
 
 import { itemType } from "../interfaces/Item";
 import { ShopContext } from "src/context/ShopContext";
+import { toast } from "react-toastify";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
@@ -34,10 +35,12 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
           body: JSON.stringify({ ...item, id: newId }),
         }
       );
+      toast.success("Added product sucessfully.");
       dispatchItems({ type: "Add", payload: { ...item, id: newId } });
       clearForm();
       navigate("/");
     } catch (error) {
+      toast.error("Failed to add item.");
     }
   };
 
