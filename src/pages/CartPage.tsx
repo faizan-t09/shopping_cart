@@ -8,7 +8,7 @@ export const CartPage: React.FC = () => {
   return (
     <div>
       <div className="card-container">
-        {cart!.length ? (
+        {cart?.length ? (
           cart?.map((item: itemType) => {
             return <CartCard key={item.id} item={item} />;
           })

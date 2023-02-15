@@ -8,7 +8,7 @@ export const ProductDetailsPage: React.FC = () => {
   const { items } = useContext(ShopContext);
   const params = useParams();
   const [item, setItem] = useState(
-    items!.filter((item) => item.id === Number(params.productId))
+    items?.filter((item) => item.id === Number(params.productId))
   );
   useEffect(() => {
     if (items.length === 0) {

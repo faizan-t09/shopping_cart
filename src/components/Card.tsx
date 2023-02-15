@@ -97,7 +97,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem!(item.id);
+              deleteItem(item.id);
             }}
           />
         )}
@@ -108,7 +108,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              toggleWishlist!(item.id);
+              toggleWishlist(item.id);
             }}
           >
             {item.wishlisted ? "WishListed" : "Add to WishList"}
@@ -116,7 +116,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onAddToCart!(item);
+              onAddToCart(item);
               postAddToCart(item.id);
             }}
           >
