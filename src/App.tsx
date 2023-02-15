@@ -60,8 +60,11 @@ function App(): JSX.Element {
           path="/"
           element={<LoadingHOC Wrapped={HomePage} loading={isLoading} />}
         />
+        <Route
+          path="/shop"
+          element={<LoadingHOC Wrapped={ShopPage} loading={isLoading} />}
+        />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/shop" element={<ShopPage />} />
         <Route path="/shop/:productId" element={<ProductDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="*" element={<NotFoundPage />} />

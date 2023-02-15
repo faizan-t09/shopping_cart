@@ -18,6 +18,7 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
 
   //Removes item from the items
   const deleteItem = (itemId: number): void => {
+    deleteItemFromDb(itemId)
       .then((res) => res.text())
       .then((data) => {
         toast.success(`Deleted item.`);
