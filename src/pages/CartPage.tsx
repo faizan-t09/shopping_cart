@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { itemType } from "src/interfaces/Item";
 import { CartCard } from "src/components/CartCard";
 import { ShopContext } from "src/context/ShopContext";
 

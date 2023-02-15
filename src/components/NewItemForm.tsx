@@ -2,7 +2,6 @@ import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
-import { itemType } from "../interfaces/Item";
 import { ShopContext } from "src/context/ShopContext";
 import { toast } from "react-toastify";
 

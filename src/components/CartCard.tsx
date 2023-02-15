@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./Card.css";
 import { HiXMark } from "react-icons/hi2";
 import { ShopContext } from "src/context/ShopContext";
-import { itemType } from "../interfaces/Item";
 import { toast } from "react-toastify";
 
 interface propType {

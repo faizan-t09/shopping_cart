@@ -12,7 +12,6 @@ import NavBar from "./components/NavBar";
 import { LoadingHOC } from "./components/LoadingHOC";
 
 import { ShopContext } from "./context/ShopContext";
-import { itemType } from "./interfaces/Item";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
