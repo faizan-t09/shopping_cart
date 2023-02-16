@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Card } from "src/components/Card/Card";
-import useItemActionsHelper from "src/components/Card/useItemActionsHelper";
+import useItemActionsHelper from "src/hooks/useItemActionsHelper";
 
 import { ShopContext } from "src/context/ShopContext";
 

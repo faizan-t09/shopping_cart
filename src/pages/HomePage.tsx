@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Header } from "src/components/Header/Header";
 import { Card } from "src/components/Card/Card";
-import useItemActionsHelper from "src/components/Card/useItemActionsHelper";
+import useItemActionsHelper from "src/hooks/useItemActionsHelper";
 import { ShopContext } from "src/context/ShopContext";
 
 export const HomePage: React.FC = () => {

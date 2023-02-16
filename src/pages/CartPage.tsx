@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Card } from "src/components/Card/Card";
-import useCartActionsHelper from "src/components/Card/useCartActionsHelper";
+import useCartActionsHelper from "src/hooks/useCartActionsHelper";
 import { ShopContext } from "src/context/ShopContext";
 
 export const CartPage: React.FC = () => {
