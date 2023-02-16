@@ -4,6 +4,7 @@ import "./form&Details.css";
 
 import { ShopContext } from "src/context/ShopContext";
 import { toast } from "react-toastify";
+import { validate } from "./formHelper";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
@@ -43,41 +44,6 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     }
   };
 
-  const validate = () => {
-    let formErrorFree = true;
-    setError((curr) => {
-      let currentErrors = {
-        title: "",
-        price: "",
-        imgsrc: "",
-      };
-
-      if (!form.title) {
-        currentErrors.title = "Title is required";
-        formErrorFree = false;
-      } else if (form.title.length < 3) {
-        currentErrors.title = "Title must be longer than 3 chars";
-        formErrorFree = false;
-      }
-
-      if (!form.price) {
-        currentErrors.price = "Price is required";
-        formErrorFree = false;
-      } else if (Number(form.price) <= 0) {
-        currentErrors.price = "Price must be greater than 0";
-        formErrorFree = false;
-      }
-
-      if (!form.image) {
-        currentErrors.imgsrc = "Image Url is required";
-        formErrorFree = false;
-      }
-
-      return currentErrors;
-    });
-    return formErrorFree;
-  };
-
   //Debouncing validation
   const timeOutId = useRef<NodeJS.Timeout | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +52,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     });
     timeOutId.current && clearTimeout(timeOutId.current);
     timeOutId.current = setTimeout(() => {
-      validate();
+      checkErrors();
     }, 500);
   };
 
@@ -103,10 +69,15 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     });
   };
 
-  const addItem = (event: React.FormEvent) => {
-    event.preventDefault();
+  const checkErrors = () => {
+    const { formErrorFree, currentErrors } = validate(form);
+    setError(currentErrors);
+    return formErrorFree;
+  };
 
-    if (validate()) {
+  const onSubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (checkErrors()) {
       addNewItem(form);
     }
   };
@@ -135,7 +106,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
           </h1>
         </div>
 
-        <form onSubmit={addItem}>
+        <form onSubmit={onSubmitHandler}>
           <div>
             <label>Title : </label>
             <input
@@ -144,7 +115,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.title}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.title}</p>
@@ -166,7 +137,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="number"
               value={form.price}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.price}</p>
@@ -178,7 +149,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.image}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.imgsrc}</p>
