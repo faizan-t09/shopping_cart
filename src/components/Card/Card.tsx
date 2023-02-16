@@ -2,86 +2,23 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Card.css";
 import { HiXMark } from "react-icons/hi2";
-
 import { ShopContext } from "src/context/ShopContext";
-import { toast } from "react-toastify";
 
 interface propType {
   item: itemType;
+  deleteProduct: (itemId: number) => void;
+  addToCart?: (item: itemType) => void;
+  toggleWishlist?: (itemId: number) => void;
 }
 
-export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
+export const Card: React.FC<propType> = ({
+  item,
+  deleteProduct,
+  addToCart,
+  toggleWishlist,
+}: propType): JSX.Element => {
   const navigate = useNavigate();
-  const { del, cart, dispatchItems, dispatchCart } = useContext(ShopContext);
-
-  //Removes item from the items
-  const deleteItem = (itemId: number): void => {
-    deleteItemFromDb(itemId)
-      .then((res) => res.text())
-      .then((data) => {
-        toast.success(`Deleted item.`);
-        dispatchItems({ type: "Delete", payload: { itemId: itemId } });
-        //Removes the item from the cart as well
-        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
-      })
-      .catch((error) => {
-        toast.error(`Failed to Delete item.`);
-      });
-  };
-
-  const deleteItemFromDb = async (id: Number) => {
-    return await fetch(
-      `${process.env.REACT_APP_MY_API_BASE_URL}/product/${id}`,
-      {
-        method: "DELETE",
-      }
-    );
-  };
-
-  //Toggles wishlist for a item
-  const toggleWishlist = (itemId: number): void => {
-    fetch(
-      `${process.env.REACT_APP_MY_API_BASE_URL}/product/wishlist/${itemId}`,
-      {
-        method: "POST",
-      }
-    )
-      .then(() => {
-        toast.success("Toggled wishlist");
-        dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
-      })
-      .catch(() => {
-        toast.error("Failed to toggle wishlist");
-      });
-  };
-
-  //Adds a item to the cart
-  const onAddToCart = (item: itemType): void => {
-    if (
-      cart.filter((cartItem) => {
-        return cartItem.id === item.id;
-      }).length === 0
-    ) {
-      dispatchCart({ type: "Add", payload: { ...item, count: 1 } });
-    } else {
-      dispatchCart({
-        type: "Increament quantity",
-        payload: { itemId: item.id },
-      });
-    }
-  };
-
-  const postAddToCart = (id: Number) => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart/${id}`, {
-      method: "POST",
-    })
-      .then(() => {
-        toast.success("Added to cart sucessfully");
-      })
-      .catch(() => {
-        toast.error("Failed to add to cart");
-      });
-  };
+  const { del } = useContext(ShopContext);
 
   return (
     <>
@@ -99,32 +36,43 @@ export const Card: React.FC<propType> = ({ item }: propType): JSX.Element => {
             color="red"
             onClick={(e) => {
               e.stopPropagation();
-              deleteItem(item.id);
+              deleteProduct(item.id);
             }}
           />
         )}
         <h4>{item.title.slice(0, 40) + "..."}</h4>
         <p>{item.description.slice(0, 100) + "..."}</p>
-        <p>{item.price}/-</p>
-        <div className="actions">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleWishlist(item.id);
-            }}
-          >
-            {item.wishlisted ? "WishListed" : "Add to WishList"}
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(item);
-              postAddToCart(item.id);
-            }}
-          >
-            Add to cart
-          </button>
-        </div>
+
+        {addToCart && toggleWishlist ? (
+          <>
+            <p>{item.price}/-</p>
+            <div className="actions">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleWishlist(item.id);
+                }}
+              >
+                {item.wishlisted ? "WishListed" : "Add to WishList"}
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(item);
+                }}
+              >
+                Add to cart
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p>{item.price * item.count!}/-</p>
+            <p>
+              <b>Quantity :{item.count}</b>
+            </p>
+          </>
+        )}
       </div>
     </>
   );
