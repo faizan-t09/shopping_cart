@@ -14,7 +14,7 @@ export type itemActionTypes =
 
 export const initialItems: itemType[] = [];
 
-export const itemReducer = (state: itemType[], action: itemActionTypes) => {
+export const itemReducer = (state: itemType[] = initialItems, action: itemActionTypes) => {
   switch (action.type) {
     case "Initialize":
       return [...action.payload];

@@ -4,7 +4,7 @@ export type delActionType = {
 
 export const initialDel: boolean = false;
 
-export const delReducer = (state: boolean, action: delActionType) => {
+export const delReducer = (state: boolean = initialDel, action: delActionType) => {
   switch (action.type) {
     case "Toggle":
       return !state;

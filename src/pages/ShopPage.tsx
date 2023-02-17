@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Card } from "src/components/Card/Card";
 import useItemActionsHelper from "src/hooks/useItemActionsHelper";
-
-import { ShopContext } from "src/context/ShopContext";
+import { useSelector } from "react-redux";
+import { rootStateType } from "src/React-Redux/rootReducer";
 
 export const ShopPage: React.FC = () => {
-  const { items } = useContext(ShopContext);
+  const items = useSelector((state : rootStateType) => state.item);
   const { deleteItem, toggleWishlist, onAddToCart } = useItemActionsHelper();
 
   return (

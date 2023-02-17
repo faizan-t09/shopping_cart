@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import { ShopContext } from "../../context/ShopContext";
+import { useSelector, useDispatch } from "react-redux";
+import { rootStateType } from "../../React-Redux/rootReducer";
 
 const NavBar = () => {
-  const { del, dispatchDel } = useContext(ShopContext);
+  const dispatch = useDispatch();
+  const del = useSelector((state: rootStateType) => state.del);
   return (
     <div className="nav-container">
       <div className="nav-title">Shopping Cart</div>
@@ -13,7 +15,7 @@ const NavBar = () => {
           <input
             type="checkbox"
             onChange={() => {
-              dispatchDel({ type: "Toggle" });
+              dispatch({ type: "Toggle" });
             }}
             checked={del}
           ></input>

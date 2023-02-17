@@ -1,6 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import { useDispatch } from "react-redux";
 
 import { HomePage } from "./pages/HomePage";
 import { AdminPage } from "./pages/AdminPage";
@@ -11,17 +12,19 @@ import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/NavBar/NavBar";
 import { LoadingHOC } from "./components/LoadingHigherOrderComponent/LoadingHOC";
 
-import { ShopContext } from "./context/ShopContext";
+import cartAction from "./React-Redux/actions/cartActions";
+import itemAction from "./React-Redux/actions/itemActions";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App(): JSX.Element {
-  const { dispatchItems, dispatchCart } = useContext(ShopContext);
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
       .then((res) => res.json())
-      .then((data) => dispatchItems({ type: "Initialize", payload: data }))
+      .then((data) => dispatch(itemAction.initialize(data)))
       .catch((error) => {
         toast.error(`Failed to fetch items.`);
       })
@@ -33,7 +36,7 @@ function App(): JSX.Element {
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
       .then((res) => res.json())
-      .then((data) => dispatchCart({ type: "Initialize", payload: data }))
+      .then((data) => dispatch(cartAction.initialize(data)))
       .catch((error) => {
         toast.error(`Failed to fetch Cart.`);
       });
@@ -44,14 +47,13 @@ function App(): JSX.Element {
       <NavBar />
       <ToastContainer
         position="bottom-right"
-        autoClose={2000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
         theme="light"
       />
       <Routes>

@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import {useSelector} from 'react-redux';
 import "./Card.css";
 import { HiXMark } from "react-icons/hi2";
-import { ShopContext } from "src/context/ShopContext";
+import { rootStateType } from "src/React-Redux/rootReducer";
+
 
 interface propType {
   item: itemType;
@@ -18,7 +20,7 @@ export const Card: React.FC<propType> = ({
   toggleWishlist,
 }: propType): JSX.Element => {
   const navigate = useNavigate();
-  const { del } = useContext(ShopContext);
+  const del  = useSelector((state : rootStateType)=>state.del);
 
   return (
     <>

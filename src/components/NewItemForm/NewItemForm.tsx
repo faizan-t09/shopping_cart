@@ -1,14 +1,14 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./form&Details.css";
-
-import { ShopContext } from "src/context/ShopContext";
 import { toast } from "react-toastify";
 import { validate } from "./formHelper";
+import { useDispatch } from "react-redux";
+import itemAction from "src/React-Redux/actions/itemActions";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
-  const { dispatchItems } = useContext(ShopContext);
+  const dispatch = useDispatch();
 
   const [form, setForm] = useState<itemType>({
     id: 0,
@@ -36,7 +36,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
         }
       );
       toast.success("Added product sucessfully.");
-      dispatchItems({ type: "Add", payload: { ...item, id: newId } });
+      dispatch(itemAction.add({ ...item, id: newId }));
       clearForm();
       navigate("/");
     } catch (error) {

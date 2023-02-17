@@ -1,18 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/NewItemForm/form&Details.css";
-import { ShopContext } from "src/context/ShopContext";
+import { useSelector } from "react-redux";
+import { rootStateType } from "../React-Redux/rootReducer";
 
 export const ProductDetailsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { items } = useContext(ShopContext);
+  const items = useSelector((state: rootStateType) => state.item);
   const params = useParams();
   const [item, setItem] = useState(
     items?.filter((item) => item.id === Number(params.productId))
   );
   useEffect(() => {
     if (items.length === 0) {
-      fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/${params.productId}`)
+      fetch(
+        `${process.env.REACT_APP_MY_API_BASE_URL}/product/${params.productId}`
+      )
         .then((res) => res.json())
         .then((data) => setItem([data]))
         .catch((error) => {

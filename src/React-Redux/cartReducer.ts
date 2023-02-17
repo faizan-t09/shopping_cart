@@ -1,27 +1,35 @@
 export type cartActionTypes =
   | {
-      type: "Initialize";
+      type: "Initialize Cart";
       payload: itemType[];
     }
   | {
-      type: "Delete" | "Remove" | "Increament quantity" | "Decreament quantity";
+      type:
+        | "Delete from Cart"
+        | "Increament quantity"
+        | "Decreament quantity";
       payload: { itemId: number };
     }
   | {
-      type: "Add";
+      type: "Add to Cart";
       payload: itemType;
     };
 
 export const initialCart: itemType[] = [];
 
-export const cartReducer = (state: itemType[], action: cartActionTypes) => {
+export const cartReducer = (
+  state: itemType[] = initialCart,
+  action: cartActionTypes
+) => {
   switch (action.type) {
-    case "Initialize":
+    case "Initialize Cart":
       return [...action.payload];
-    case "Add":
+    case "Add to Cart": {
       return [...state, action.payload];
-    case "Delete":
+    }
+    case "Delete from Cart": {
       return state.filter((item) => item.id !== action.payload.itemId);
+    }
     case "Increament quantity":
       return state.map((cartItem) => {
         if (cartItem.id === action.payload.itemId) {

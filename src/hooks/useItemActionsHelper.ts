@@ -1,25 +1,30 @@
-import { ShopContext } from "src/context/ShopContext";
 import { toast } from "react-toastify";
 
-import { useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { rootStateType } from "../React-Redux/rootReducer";
+import cartAction from "src/React-Redux/actions/cartActions";
+import itemAction from "src/React-Redux/actions/itemActions";
 
 const useItemActionsHelper = () => {
-  const { cart, dispatchItems, dispatchCart } = useContext(ShopContext);
+  const dispatch = useDispatch();
+  const cart = useSelector((state: rootStateType) => state.cart);
 
   //Removes item from the items
   const deleteItem = (itemId: number): void => {
+    console.log("Delete item called", itemId)
     deleteItemFromDb(itemId)
       .then((res) => res.text())
       .then((data) => {
         toast.success(`Deleted item.`);
-        dispatchItems({ type: "Delete", payload: { itemId: itemId } });
+        dispatch(itemAction.delete(itemId));
         //Removes the item from the cart as well
-        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+        dispatch(cartAction.delete(itemId));
       })
       .catch((error) => {
         toast.error(`Failed to Delete item.`);
       });
-    onRemoveFromCart(itemId);
+    if(cart.filter(item => item.id === itemId).length)
+      onRemoveFromCart(itemId);
   };
 
   const onRemoveFromCart = (itemId: number): void => {
@@ -27,12 +32,9 @@ const useItemActionsHelper = () => {
       .then(() => {
         toast.success("Removed from cart sucessfully");
         if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
-          dispatchCart({
-            type: "Decreament quantity",
-            payload: { itemId: itemId },
-          });
+          dispatch(cartAction.DecrementCount(itemId));
         } else {
-          dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+          dispatch(cartAction.delete(itemId));
         }
       })
       .catch(() => {
@@ -63,10 +65,11 @@ const useItemActionsHelper = () => {
 
   //Toggles wishlist for a item
   const toggleWishlist = (itemId: number): void => {
+    console.log("toggleWishlist called", itemId)
     toggleWishlistOnDb(itemId)
       .then(() => {
         toast.success("Toggled wishlist");
-        dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
+        dispatch(itemAction.toggleWishList(itemId));
       })
       .catch(() => {
         toast.error("Failed to toggle wishlist");
@@ -81,6 +84,7 @@ const useItemActionsHelper = () => {
 
   //Adds a item to the cart
   const onAddToCart = (item: itemType): void => {
+    console.log("onAddToCart called", item)
     addToCartOnDb(item.id)
       .then(() => {
         toast.success("Added to cart sucessfully");
@@ -89,12 +93,9 @@ const useItemActionsHelper = () => {
             return cartItem.id === item.id;
           }).length === 0
         ) {
-          dispatchCart({ type: "Add", payload: { ...item, count: 1 } });
+          dispatch(cartAction.Add({...item,count:1}));
         } else {
-          dispatchCart({
-            type: "Increament quantity",
-            payload: { itemId: item.id },
-          });
+          dispatch(cartAction.IncrementCount(item.id));
         }
       })
       .catch(() => {
