@@ -1,16 +1,15 @@
-import { createStore } from "redux";
 import { combineReducers } from "redux";
 
-import { cartReducer } from "./cartReducer";
-import { itemReducer } from "./itemReducer";
-import { delReducer } from "./toggleDeleteReducer";
+import cartSlice from "./cartReducer";
+import itemSlice from "./itemReducer";
+import delSlice from "./toggleDeleteReducer";
 
 const rootReducer = combineReducers({
-  cart: cartReducer,
-  item: itemReducer,
-  del: delReducer,
+  cart: cartSlice.reducer,
+  item: itemSlice.reducer,
+  del: delSlice.reducer,
 });
 
 export type rootStateType = ReturnType<typeof rootReducer>;
 
-export const rootStore = createStore(rootReducer);
+export default rootReducer;

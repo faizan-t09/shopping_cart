@@ -1,14 +1,16 @@
-export type delActionType = {
-  type: "Toggle";
-};
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialDel: boolean = false;
 
-export const delReducer = (state: boolean = initialDel, action: delActionType) => {
-  switch (action.type) {
-    case "Toggle":
+export const delSlice = createSlice({
+  name: "delSlice",
+  initialState: initialDel,
+  reducers: {
+    toggleDelete: (state) => {
       return !state;
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const delActions = delSlice.actions;
+export default delSlice;

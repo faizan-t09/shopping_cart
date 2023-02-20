@@ -1,34 +1,28 @@
-export type itemActionTypes =
-  | {
-      type: "Initialize";
-      payload: itemType[];
-    }
-  | {
-      type: "Delete" | "ToggleWishlist";
-      payload: { itemId: number };
-    }
-  | {
-      type: "Add";
-      payload: itemType;
-    };
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialItems: itemType[] = [];
 
-export const itemReducer = (state: itemType[] = initialItems, action: itemActionTypes) => {
-  switch (action.type) {
-    case "Initialize":
+const itemSlice = createSlice({
+  name: "itemSlice",
+  initialState: initialItems,
+  reducers: {
+    initializeItems: (state, action) => {
       return [...action.payload];
-    case "Add":
+    },
+    addToItems: (state, action) => {
       return [...state, action.payload];
-    case "Delete":
-      return state.filter((item) => item.id !== action.payload.itemId);
-    case "ToggleWishlist":
-      return state.map((item) => {
-        if (item.id === action.payload.itemId)
-          item.wishlisted = !item.wishlisted;
-        return item;
-      });
-    default:
-      return state;
-  }
-};
+    },
+    deleteFromItems: (state, action) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
+    toggleWishlist: (state, action) => {
+      state[state.findIndex((item) => item.id === action.payload)].wishlisted =
+        !state[state.findIndex((item) => item.id === action.payload)]
+          .wishlisted;
+    },
+  },
+});
+
+export const itemActions = itemSlice.actions;
+
+export default itemSlice;

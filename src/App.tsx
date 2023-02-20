@@ -12,8 +12,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/NavBar/NavBar";
 import { LoadingHOC } from "./components/LoadingHigherOrderComponent/LoadingHOC";
 
-import cartAction from "./React-Redux/actions/cartActions";
-import itemAction from "./React-Redux/actions/itemActions";
+import { cartActions } from "./React-Redux/cartReducer";
+import { itemActions } from "./React-Redux/itemReducer";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,7 @@ function App(): JSX.Element {
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
       .then((res) => res.json())
-      .then((data) => dispatch(itemAction.initialize(data)))
+      .then((data) => dispatch(itemActions.initializeItems(data)))
       .catch((error) => {
         toast.error(`Failed to fetch items.`);
       })
@@ -36,7 +36,7 @@ function App(): JSX.Element {
   useEffect(() => {
     fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
       .then((res) => res.json())
-      .then((data) => dispatch(cartAction.initialize(data)))
+      .then((data) => dispatch(cartActions.initializeCart(data)))
       .catch((error) => {
         toast.error(`Failed to fetch Cart.`);
       });

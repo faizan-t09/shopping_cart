@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { rootStateType } from "../../React-Redux/rootReducer";
+import { delActions } from "src/React-Redux/toggleDeleteReducer";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const NavBar = () => {
           <input
             type="checkbox"
             onChange={() => {
-              dispatch({ type: "Toggle" });
+              dispatch(delActions.toggleDelete());
             }}
             checked={del}
           ></input>

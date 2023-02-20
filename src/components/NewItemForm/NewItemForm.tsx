@@ -4,7 +4,7 @@ import "./form&Details.css";
 import { toast } from "react-toastify";
 import { validate } from "./formHelper";
 import { useDispatch } from "react-redux";
-import itemAction from "src/React-Redux/actions/itemActions";
+import {itemActions} from "src/React-Redux/itemReducer";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
         }
       );
       toast.success("Added product sucessfully.");
-      dispatch(itemAction.add({ ...item, id: newId }));
+      dispatch(itemActions.addToItems({ ...item, id: newId }));
       clearForm();
       navigate("/");
     } catch (error) {

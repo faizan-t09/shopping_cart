@@ -1,50 +1,29 @@
-export type cartActionTypes =
-  | {
-      type: "Initialize Cart";
-      payload: itemType[];
-    }
-  | {
-      type:
-        | "Delete from Cart"
-        | "Increament quantity"
-        | "Decreament quantity";
-      payload: { itemId: number };
-    }
-  | {
-      type: "Add to Cart";
-      payload: itemType;
-    };
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialCart: itemType[] = [];
 
-export const cartReducer = (
-  state: itemType[] = initialCart,
-  action: cartActionTypes
-) => {
-  switch (action.type) {
-    case "Initialize Cart":
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: initialCart,
+  reducers: {
+    initializeCart: (state, action) => {
       return [...action.payload];
-    case "Add to Cart": {
+    },
+    addToCart: (state, action) => {
       return [...state, action.payload];
-    }
-    case "Delete from Cart": {
-      return state.filter((item) => item.id !== action.payload.itemId);
-    }
-    case "Increament quantity":
-      return state.map((cartItem) => {
-        if (cartItem.id === action.payload.itemId) {
-          cartItem.count! += 1;
-        }
-        return cartItem;
-      });
-    case "Decreament quantity":
-      return state.map((cartItem) => {
-        if (cartItem.id === action.payload.itemId) {
-          cartItem.count! -= 1;
-        }
-        return cartItem;
-      });
-    default:
-      return state;
-  }
-};
+    },
+    deleteFromCart: (state, action) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
+    incrementCount: (state, action) => {
+      state[state.findIndex((item) => item.id === action.payload)].count! += 1;
+    },
+    decrementCount: (state, action) => {
+      state[state.findIndex((item) => item.id === action.payload)].count! -= 1;
+    },
+  },
+});
+
+export const cartActions = cartSlice.actions;
+
+export default cartSlice;

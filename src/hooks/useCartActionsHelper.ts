@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { rootStateType } from "../React-Redux/rootReducer";
-import cartAction from "src/React-Redux/actions/cartActions";
+import { cartActions } from "src/React-Redux/cartReducer";
 
 const useCartActionsHelper = () => {
   const dispatch = useDispatch();
@@ -13,9 +13,9 @@ const useCartActionsHelper = () => {
       .then(() => {
         toast.success("Removed from cart sucessfully");
         if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
-          dispatch(cartAction.DecrementCount(itemId));
+          dispatch(cartActions.decrementCount(itemId));
         } else {
-          dispatch(cartAction.delete(itemId));
+          dispatch(cartActions.deleteFromCart(itemId));
         }
       })
       .catch(() => {
