@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { ShopContextProvider } from "./context/ShopContext";
-import ErrorHandler from "src/components/ErrorHandler";
+import ErrorHandler from "src/components/ErrorBoundary/ErrorHandler";
 import { ErrorBoundary } from "react-error-boundary";
 
 const root = ReactDOM.createRoot(

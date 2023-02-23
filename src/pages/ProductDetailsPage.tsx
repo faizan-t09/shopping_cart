@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "../components/Modal.css";
+import "../components/NewItemForm/form&Details.css";
 import { ShopContext } from "src/context/ShopContext";
 
 export const ProductDetailsPage: React.FC = () => {
@@ -8,7 +8,7 @@ export const ProductDetailsPage: React.FC = () => {
   const { items } = useContext(ShopContext);
   const params = useParams();
   const [item, setItem] = useState(
-    items!.filter((item) => item.id === Number(params.productId))
+    items?.filter((item) => item.id === Number(params.productId))
   );
   useEffect(() => {
     if (items.length === 0) {

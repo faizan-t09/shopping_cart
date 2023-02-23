@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { itemType } from "src/interfaces/Item";
+import React, { useReducer, useEffect } from "react";
+import {
+  initialItems,
+  itemReducer,
+  itemActionTypes,
+} from "src/useReducer/itemReducer";
+import {
+  initialDel,
+  delReducer,
+  delActionType,
+} from "src/useReducer/toggleDeleteReducer";
+import {
+  initialCart,
+  cartReducer,
+  cartActionTypes,
+} from "src/useReducer/cartReducer";
 
 export const ShopContext = React.createContext({
   del: false,
   items: [] as itemType[],
   cart: [] as itemType[],
-  setDel: (value: boolean | ((prev: boolean) => boolean)) => {},
-  setItems: (value: itemType[] | ((prev: itemType[]) => itemType[])) => {},
-  setCart: (value: itemType[] | ((prev: itemType[]) => itemType[])) => {},
+  dispatchDel: (action: delActionType) => {},
+  dispatchItems: (action: itemActionTypes) => {},
+  dispatchCart: (action: cartActionTypes) => {},
 });
 
 export const ShopContextProvider: React.FC<{
   children: React.ReactElement;
 }> = ({ children }) => {
-  //useState to keep track of deletion enabled/disabled
-  const [del, setDel] = useState<boolean>(false);
+  //reducer to keep track of deletion enabled/disabled
+  const [del, dispatchDel] = useReducer(delReducer, initialDel);
 
-  //useState for storing items
-  const [items, setItems] = useState<itemType[]>([]);
+  //reducer for storing items
+  const [items, dispatchItems] = useReducer(itemReducer, initialItems);
 
-  //useState to fetch cart items for local storage and display
-  const [cart, setCart] = useState<itemType[]>(
-    JSON.parse(localStorage.getItem("Cart") || "[]")
-  );
+  //reducer to fetch cart items for local storage and display
+  const [cart, dispatchCart] = useReducer(cartReducer, initialCart);
 
   //Each time cart items are changed the updated cart items are written onto local storage
   useEffect(() => {
@@ -31,7 +43,7 @@ export const ShopContextProvider: React.FC<{
 
   return (
     <ShopContext.Provider
-      value={{ del, items, cart, setCart, setDel, setItems }}
+      value={{ del, items, cart, dispatchCart, dispatchDel, dispatchItems }}
     >
       {children}
     </ShopContext.Provider>

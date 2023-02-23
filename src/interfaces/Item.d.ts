@@ -1,4 +1,4 @@
-export interface itemType {
+type itemType = {
     id:number;
     title: string;
     description: string;

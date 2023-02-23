@@ -1,13 +1,14 @@
-import React, { useState, useRef, useContext} from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Modal.css";
+import "./form&Details.css";
 
-import { itemType } from "../interfaces/Item";
 import { ShopContext } from "src/context/ShopContext";
+import { toast } from "react-toastify";
+import { validate } from "./formHelper";
 
 export const NewItemForm: React.FC = (): JSX.Element | null => {
   const navigate = useNavigate();
-  const { setItems } = useContext(ShopContext);
+  const { dispatchItems } = useContext(ShopContext);
 
   const [form, setForm] = useState<itemType>({
     id: 0,
@@ -23,53 +24,24 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
   //Adds new item to the items
   const addNewItem = async (item: itemType): Promise<void> => {
     const newId = Math.floor(Math.random() * 500);
-    const res = await fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/addProduct`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify({ ...item, id: newId })
-    });
-    const data = await res.text();
-    console.log(data);
-    setItems((prev) => {
-      return [...prev, { ...item, id: newId }];
-    });
-  };
-
-  const validate = () => {
-    let errorsPresent = false;
-    setError((curr) => {
-      let currentErrors = {
-        title: "",
-        price: "",
-        imgsrc: "",
-      };
-
-      if (!form.title) {
-        currentErrors.title = "Title is required";
-        errorsPresent = true;
-      } else if (form.title.length < 3) {
-        currentErrors.title = "Title must be longer than 3 chars";
-        errorsPresent = true;
-      }
-
-      if (!form.price) {
-        currentErrors.price = "Price is required";
-        errorsPresent = true;
-      } else if (Number(form.price) <= 0) {
-        currentErrors.price = "Price must be greater than 0";
-        errorsPresent = true;
-      }
-
-      if (!form.image) {
-        currentErrors.imgsrc = "Image Url is required";
-        errorsPresent = true;
-      }
-
-      return currentErrors;
-    });
-    return errorsPresent;
+    try {
+      await fetch(
+        `${process.env.REACT_APP_MY_API_BASE_URL}/product/addProduct`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;chardispatch=utf-8",
+          },
+          body: JSON.stringify({ ...item, id: newId }),
+        }
+      );
+      toast.success("Added product sucessfully.");
+      dispatchItems({ type: "Add", payload: { ...item, id: newId } });
+      clearForm();
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to add item.");
+    }
   };
 
   //Debouncing validation
@@ -80,7 +52,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     });
     timeOutId.current && clearTimeout(timeOutId.current);
     timeOutId.current = setTimeout(() => {
-      validate();
+      checkErrors();
     }, 500);
   };
 
@@ -97,13 +69,16 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
     });
   };
 
-  const addItem = (event: React.FormEvent) => {
-    event.preventDefault();
+  const checkErrors = () => {
+    const { formErrorFree, currentErrors } = validate(form);
+    setError(currentErrors);
+    return formErrorFree;
+  };
 
-    if (!validate()) {
+  const onSubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (checkErrors()) {
       addNewItem(form);
-      clearForm();
-      navigate("/");
     }
   };
 
@@ -131,7 +106,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
           </h1>
         </div>
 
-        <form onSubmit={addItem}>
+        <form onSubmit={onSubmitHandler}>
           <div>
             <label>Title : </label>
             <input
@@ -140,7 +115,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.title}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.title}</p>
@@ -162,7 +137,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="number"
               value={form.price}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.price}</p>
@@ -174,7 +149,7 @@ export const NewItemForm: React.FC = (): JSX.Element | null => {
               type="text"
               value={form.image}
               onChange={handleChange}
-              onBlur={validate}
+              onBlur={checkErrors}
             ></input>
           </div>
           <p>{error.imgsrc}</p>
