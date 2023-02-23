@@ -6,22 +6,21 @@ const useCartActionsHelper = () => {
   const { cart, dispatchCart } = useContext(ShopContext);
 
   //Removes Item from the cart
-  const onRemoveFromCart = (itemId: number): void => {
-    removeFromDbCart(itemId)
-      .then(() => {
-        toast.success("Removed from cart sucessfully");
-        if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
-          dispatchCart({
-            type: "Decreament quantity",
-            payload: { itemId: itemId },
-          });
-        } else {
-          dispatchCart({ type: "Delete", payload: { itemId: itemId } });
-        }
-      })
-      .catch(() => {
-        toast.error("Failed to remove from cart");
-      });
+  const onRemoveFromCart = async (itemId: number) => {
+    try {
+      await removeFromDbCart(itemId);
+      toast.success("Removed from cart sucessfully");
+      if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
+        dispatchCart({
+          type: "Decreament quantity",
+          payload: { itemId: itemId },
+        });
+      } else {
+        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+      }
+    } catch {
+      toast.error("Failed to remove from cart");
+    }
   };
 
   const removeFromDbCart = (id: Number) => {

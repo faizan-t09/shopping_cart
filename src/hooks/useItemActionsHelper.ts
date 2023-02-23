@@ -7,37 +7,35 @@ const useItemActionsHelper = () => {
   const { cart, dispatchItems, dispatchCart } = useContext(ShopContext);
 
   //Removes item from the items
-  const deleteItem = (itemId: number): void => {
-    deleteItemFromDb(itemId)
-      .then((res) => res.text())
-      .then((data) => {
-        toast.success(`Deleted item.`);
-        dispatchItems({ type: "Delete", payload: { itemId: itemId } });
-        //Removes the item from the cart as well
-        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
-      })
-      .catch((error) => {
-        toast.error(`Failed to Delete item.`);
-      });
+  const deleteItem = async (itemId: number) => {
+    try {
+      await deleteItemFromDb(itemId);
+      toast.success(`Deleted item.`);
+      dispatchItems({ type: "Delete", payload: { itemId: itemId } });
+      //Removes the item from the cart as well
+      dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+    } catch {
+      toast.error(`Failed to Delete item.`);
+    }
     onRemoveFromCart(itemId);
   };
 
-  const onRemoveFromCart = (itemId: number): void => {
-    removeFromDbCart(itemId)
-      .then(() => {
-        toast.success("Removed from cart sucessfully");
-        if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
-          dispatchCart({
-            type: "Decreament quantity",
-            payload: { itemId: itemId },
-          });
-        } else {
-          dispatchCart({ type: "Delete", payload: { itemId: itemId } });
-        }
-      })
-      .catch(() => {
-        toast.error("Failed to remove from cart");
-      });
+  const onRemoveFromCart = async (itemId: number) => {
+    try {
+      await removeFromDbCart(itemId);
+
+      toast.success("Removed from cart sucessfully");
+      if (cart.filter((cartItem) => cartItem.id === itemId)[0].count! > 1) {
+        dispatchCart({
+          type: "Decreament quantity",
+          payload: { itemId: itemId },
+        });
+      } else {
+        dispatchCart({ type: "Delete", payload: { itemId: itemId } });
+      }
+    } catch {
+      toast.error("Failed to remove from cart");
+    }
   };
 
   const removeFromDbCart = (id: Number) => {
@@ -62,15 +60,15 @@ const useItemActionsHelper = () => {
   };
 
   //Toggles wishlist for a item
-  const toggleWishlist = (itemId: number): void => {
-    toggleWishlistOnDb(itemId)
-      .then(() => {
-        toast.success("Toggled wishlist");
-        dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
-      })
-      .catch(() => {
-        toast.error("Failed to toggle wishlist");
-      });
+  const toggleWishlist = async (itemId: number) => {
+    try {
+      await toggleWishlistOnDb(itemId);
+
+      toast.success("Toggled wishlist");
+      dispatchItems({ type: "ToggleWishlist", payload: { itemId: itemId } });
+    } catch {
+      toast.error("Failed to toggle wishlist");
+    }
   };
 
   const addToCartOnDb = async (id: Number) => {
@@ -80,26 +78,26 @@ const useItemActionsHelper = () => {
   };
 
   //Adds a item to the cart
-  const onAddToCart = (item: itemType): void => {
-    addToCartOnDb(item.id)
-      .then(() => {
-        toast.success("Added to cart sucessfully");
-        if (
-          cart.filter((cartItem) => {
-            return cartItem.id === item.id;
-          }).length === 0
-        ) {
-          dispatchCart({ type: "Add", payload: { ...item, count: 1 } });
-        } else {
-          dispatchCart({
-            type: "Increament quantity",
-            payload: { itemId: item.id },
-          });
-        }
-      })
-      .catch(() => {
-        toast.error("Failed to add to cart");
-      });
+  const onAddToCart = async (item: itemType) => {
+    try {
+      await addToCartOnDb(item.id);
+
+      toast.success("Added to cart sucessfully");
+      if (
+        cart.filter((cartItem) => {
+          return cartItem.id === item.id;
+        }).length === 0
+      ) {
+        dispatchCart({ type: "Add", payload: { ...item, count: 1 } });
+      } else {
+        dispatchCart({
+          type: "Increament quantity",
+          payload: { itemId: item.id },
+        });
+      }
+    } catch {
+      toast.error("Failed to add to cart");
+    }
   };
 
   return { deleteItem, toggleWishlist, onAddToCart };

@@ -19,24 +19,32 @@ function App(): JSX.Element {
   const { dispatchItems, dispatchCart } = useContext(ShopContext);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
-      .then((res) => res.json())
-      .then((data) => dispatchItems({ type: "Initialize", payload: data }))
-      .catch((error) => {
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`
+        );
+        const data = await response.json();
+        dispatchItems({ type: "Initialize", payload: data });
+      } catch (error) {
         toast.error(`Failed to fetch items.`);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+      setIsLoading(false);
+    })();
   }, []);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
-      .then((res) => res.json())
-      .then((data) => dispatchCart({ type: "Initialize", payload: data }))
-      .catch((error) => {
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_MY_API_BASE_URL}/cart`
+        );
+        const data = await response.json();
+        dispatchCart({ type: "Initialize", payload: data });
+      } catch (error) {
         toast.error(`Failed to fetch Cart.`);
-      });
+      }
+    })();
   }, []);
 
   return (
