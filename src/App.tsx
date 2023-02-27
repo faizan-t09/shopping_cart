@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./React-Redux/store";
 
 import { HomePage } from "./pages/HomePage";
 import { AdminPage } from "./pages/AdminPage";
@@ -12,34 +13,23 @@ import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/NavBar/NavBar";
 import { LoadingHOC } from "./components/LoadingHigherOrderComponent/LoadingHOC";
 
-import { cartActions } from "./React-Redux/cartReducer";
-import { itemActions } from "./React-Redux/itemReducer";
+import { fetchCart } from "./React-Redux/cartReducer";
+import { fetchItems } from "./React-Redux/itemReducer";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/product/getAll`)
-      .then((res) => res.json())
-      .then((data) => dispatch(itemActions.initializeItems(data)))
-      .catch((error) => {
-        toast.error(`Failed to fetch items.`);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    dispatch(fetchItems());
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
-      .then((res) => res.json())
-      .then((data) => dispatch(cartActions.initializeCart(data)))
-      .catch((error) => {
-        toast.error(`Failed to fetch Cart.`);
-      });
+    dispatch(fetchCart());
   }, []);
 
   return (

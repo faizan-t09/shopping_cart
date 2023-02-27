@@ -1,14 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 export const initialCart: itemType[] = [];
+
+export const fetchCart = createAsyncThunk("cartSlice/fetchCart", () => {
+  return fetch(`${process.env.REACT_APP_MY_API_BASE_URL}/cart`)
+    .then((response) => response.json())
+    .catch((error) => {
+      toast.error("Failed to fetch cart");
+    });
+});
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialCart,
   reducers: {
-    initializeCart: (state, action) => {
-      return [...action.payload];
-    },
     addToCart: (state, action) => {
       return [...state, action.payload];
     },
@@ -21,6 +27,11 @@ const cartSlice = createSlice({
     decrementCount: (state, action) => {
       state[state.findIndex((item) => item.id === action.payload)].count! -= 1;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchCart.fulfilled, (state, action) => {
+      return [...action.payload];
+    });
   },
 });
 
