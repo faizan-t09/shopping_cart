@@ -15,6 +15,10 @@ const itemSlice = createSlice({
   name: "itemSlice",
   initialState: initialItems,
   reducers: {
+    fetchItems: () => {},
+    initializeItems : (state, action) => {
+      return [...action.payload];
+    },
     addToItems: (state, action) => {
       return [...state, action.payload];
     },
@@ -26,11 +30,6 @@ const itemSlice = createSlice({
         !state[state.findIndex((item) => item.id === action.payload)]
           .wishlisted;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchItems.fulfilled, (state, action) => {
-      return [...action.payload];
-    });
   },
 });
 

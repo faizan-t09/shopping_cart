@@ -1,15 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
+import createSagaMiddleware  from "redux-saga";
 
 import rootReducer from "./rootReducer";
 import { useDispatch } from 'react-redux';
+import rootSaga from "./rootSaga";
+
+const saga = createSagaMiddleware()
 
 const store = configureStore(
   {
     reducer: rootReducer,
-    middleware : (getDefaultMiddleware)=>getDefaultMiddleware().concat(thunk)
+    middleware : [saga]
   }
 );
+
+saga.run(rootSaga)
 
 export const useAppDispatch = useDispatch<typeof store.dispatch>;
 

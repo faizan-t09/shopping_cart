@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "./React-Redux/store";
 
 import { HomePage } from "./pages/HomePage";
@@ -13,10 +12,10 @@ import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/NavBar/NavBar";
 import { LoadingHOC } from "./components/LoadingHigherOrderComponent/LoadingHOC";
 
-import { fetchCart } from "./React-Redux/cartReducer";
-import { fetchItems } from "./React-Redux/itemReducer";
+import {cartActions} from "./React-Redux/cartReducer";
+import {itemActions} from "./React-Redux/itemReducer";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App(): JSX.Element {
@@ -24,12 +23,12 @@ function App(): JSX.Element {
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    dispatch(fetchItems());
+    dispatch(itemActions.fetchItems());
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    dispatch(fetchCart());
+    dispatch(cartActions.fetchCart());
   }, []);
 
   return (
