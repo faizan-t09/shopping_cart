@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { rootStateType } from "../../React-Redux/rootReducer";
 import { delActions } from "src/React-Redux/toggleDeleteReducer";
+import {useEffect} from 'react';
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const del = useSelector((state: rootStateType) => state.del);
+  const del = useSelector((state: rootStateType) => state.del); 
+
+
   return (
     <div className="nav-container">
       <div className="nav-title">Shopping Cart</div>

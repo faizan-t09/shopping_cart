@@ -36,6 +36,7 @@ export const Card: React.FC<propType> = ({
             className="delete-icon"
             size="20px"
             color="red"
+            tabIndex={2}
             onClick={(e) => {
               e.stopPropagation();
               deleteProduct(item.id);

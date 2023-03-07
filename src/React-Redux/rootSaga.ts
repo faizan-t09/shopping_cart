@@ -12,7 +12,7 @@ function* fetchItems(): any {
     const items = yield response.json();
     yield put(itemActions.initializeItems(items));
   } catch (err) {
-    toast("Failed to fetch items");
+    toast.error("Failed to fetch items");
   }
 }
 
@@ -25,7 +25,7 @@ function* fetchCart(): any {
     const cart = yield response.json();
     yield put(cartActions.initializeCart(cart));
   } catch (err) {
-    toast("Failed to fetch cart");
+    toast.error("Failed to fetch cart");
   }
 }
 
